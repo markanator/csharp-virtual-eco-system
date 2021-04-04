@@ -3,7 +3,7 @@ using VirtualEcoSystem.Interfaces;
 
 namespace VirtualEcoSystem.Items
 {
-    public class Item : ICollectable
+    public class Item
     {
         public string Name
         {
@@ -12,10 +12,5 @@ namespace VirtualEcoSystem.Items
         }
 
         public Dictionary<string, int> MaterialsRequiredToCraft;
-
-        public void AddToPlayerInventory()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

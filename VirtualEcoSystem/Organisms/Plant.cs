@@ -23,6 +23,8 @@ namespace VirtualEcoSystem.Organisms
             PlantAge = 1;
             base.Age = PlantAge;
             CurrentLifeStage = ReproductiveCycle.NEEDS_POLLEN;
+            //
+            CanHarvest = (int)CurrentLifeStage > 2 ? true: false;
         }
 
         /// <summary>This function attempts to pollinate plant, will call internal Plant function <c>HandleLifeCycleCount</c> if conditions are not met.</summary>
@@ -31,7 +33,7 @@ namespace VirtualEcoSystem.Organisms
             // Needs pollen
             if (this.CurrentLifeStage == ReproductiveCycle.NEEDS_POLLEN)
             {
-                this.LifeCycleDayCount++;
+                this.LifeCycleDayCount = 0;
                 this.CurrentLifeStage = ReproductiveCycle.POLLINATED;
                 return false;
             } 

@@ -21,18 +21,14 @@ namespace VirtualEcoSystem
             79,
             86
             };
+        public string CurrentEvent;
         
 
         public Environment(string _name, string _desc)
         {
             this.Name = _name;
             this.Description = _desc;
-            // get a temp from arr
-            int preTemp = AverageTempList[RandGen.Next(0, AverageTempList.Count - 1)];
-            // hold a temp value
-            int currTempIndex = preTemp > 85 ? 0 + RandGen.Next(11) : 0 - RandGen.Next(11);
-            // assign temperature
-            this.CurrentTemp = currTempIndex + preTemp;
+            PerformDailyWeatherChange();
         }
 
         public string FetchCurrentTempFromEnvironment()
@@ -40,9 +36,10 @@ namespace VirtualEcoSystem
             return $"The current temperature in the {this.Name} is: {CurrentTemp}°F";
         }
 
-        public string GenerateRandomEvent()
+        // TODO, WEATHER SYSTEM using delegates?
+        private string GenerateRandomEvent()
         {
-            if (RandGen.Next(0,2).Equals(1))
+            if (RandGen.Next(0,3) >= 1)
             {
                 if (CurrentTemp >= 104)
                 {
@@ -71,6 +68,18 @@ namespace VirtualEcoSystem
             {
                 return "Normal Day";
             }
+        }
+
+        public void PerformDailyWeatherChange()
+        {
+            // get a temp from arr
+            int preTemp = AverageTempList[RandGen.Next(0, AverageTempList.Count - 1)];
+            // hold a temp value
+            int currTempIndex = preTemp > 85 ? 0 + RandGen.Next(11) : 0 - RandGen.Next(11);
+            // assign temperature
+            this.CurrentTemp = currTempIndex + preTemp;
+            // generate an event, ran only once
+            this.CurrentEvent = GenerateRandomEvent();
         }
     }
 }

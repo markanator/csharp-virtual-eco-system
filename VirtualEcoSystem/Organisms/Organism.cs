@@ -1,8 +1,9 @@
-﻿using VirtualEcoSystem.Interfaces;
+﻿using System;
+using VirtualEcoSystem.Interfaces;
 
 namespace VirtualEcoSystem.Organisms
 {
-    public class Organism : ICollectable
+    public class Organism 
     {
         public string Name;
         public string Description;
@@ -18,11 +19,6 @@ namespace VirtualEcoSystem.Organisms
             Name = _name;
             Description = _desc;
             Age = _age;
-        }
-
-        public void AddToPlayerInventory()
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

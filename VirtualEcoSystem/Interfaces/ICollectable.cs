@@ -2,6 +2,6 @@
 {
     public interface ICollectable
     {
-        void AddToPlayerInventory();
+        void AddToPlayerInventory(Player _player);
     }
 }

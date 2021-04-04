@@ -12,9 +12,15 @@ namespace VirtualEcoSystem
 {
     public static class ConsoleUIBuilder
     {
-        public static void IntroScreen()
+        public static void IntroScreen(string _playerName)
         {
-            WriteLine($"Welcome to the {"Mojave Desert".Pastel("#ffc35c")}. Its hot here.");
+            WriteLine($"Welcome {_playerName} to the {"Mojave Desert".Pastel("#ffc35c")}. Its hot here.");
+            WriteLine("You will be in charge of this section of the Desert."
+                + $"\nPlant {"seeds".Pastel("#40c2ff")}, harvest {"wildlife".Pastel("#40c2ff")}, craft {"items".Pastel("#40c2ff")} and {"buy".Pastel("#40c2ff")} or {"sell".Pastel("#40c2ff")} from the Local Market."
+                + "\nAll in the name of science!"
+                + "\nGood luck,\n\tMark"
+                + "\n\np.s: Please don't destroy the environment like the last person.\n\n\n"
+                );
         }
 
         public static void WaitForInput(string _msg = "Press any key to continue...")
@@ -49,7 +55,8 @@ namespace VirtualEcoSystem
 
         public static string AskForPlayerName()
         {
-            WriteLine("I didn't catch your name? What was it?");
+            WriteLine("Here we are...");
+            WriteLine("By the way, I didn't catch your "+"name".Pastel("#ff458f") + "? What was it?");
             string input = ReadLine().Trim().ToLower();
 
             return input;

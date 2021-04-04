@@ -22,7 +22,7 @@ namespace VirtualEcoSystem
         public Environment GameEnvironment;
         public List<Organism> OrganismsList;
         public int DayCount;
-       
+
 
         public VirtEcoGame()
         {
@@ -44,9 +44,9 @@ namespace VirtualEcoSystem
         public override void StartGame()
         {
             base.IsPlaying = true;
-            
+
             Clear();
-            IntroScreen();
+            IntroScreen(CurrPlayer.PlayerName);
             WaitForInput();
             Clear();
             while (IsPlaying)
@@ -54,7 +54,13 @@ namespace VirtualEcoSystem
                 Clear();
                 WriteLine($"Day: {DayCount}");
                 DisplayPlayerTurns(CurrPlayer);
-                switch(PlayerOptions(new string[] { "Check Temperature. (Free)","Check Environment (Free)", "Exit Game" }))
+                switch (PlayerOptions(new string[] { 
+                    "Check Temperature",
+                    "Check Environment",
+                    "Check Inventory",
+                    // "Craft Items from Inventory"
+                    "Exit Game"
+                    }))
                 {
                     case 1:
                         ConductWeatherCheck();
@@ -63,13 +69,17 @@ namespace VirtualEcoSystem
                         ConductEnvironmentCheck();
                         break;
                     case 3:
+                        CurrPlayer.CheckInventory();
+                        WaitForInput();
+                        break;
+                    case 4:
                         this.IsPlaying = false;
                         break;
                     default:
                         break;
                 }
-                
-                
+
+
 
                 // no turns left
                 if (CurrPlayer.CurrentTurns <= 0)
@@ -80,6 +90,8 @@ namespace VirtualEcoSystem
                     CurrPlayer.CurrentTurns = CurrPlayer.MaxTurns;
                     // perform daily organism actions
                     PerformOrganismDailies();
+                    // perform daily environment actions
+                    GameEnvironment.PerformDailyWeatherChange();
                 }
                 if (!IsPlaying) break;
             }
@@ -87,6 +99,7 @@ namespace VirtualEcoSystem
             Clear();
             WaitForInput("Thanks for playing!\nVirtEco: Mojave Desert\nBy: Mark Ambrocio");
         }
+
         private void DisplayTopUI()
         {
             WriteLine($"Day: {DayCount}");
@@ -111,17 +124,17 @@ namespace VirtualEcoSystem
 
         private void ConductWeatherCheck()
         {
-            //if (CurrPlayer.PlayerConstitutionCheck())
-            //{
+            if (CurrPlayer.PlayerConstitutionCheck())
+            {
                 WriteLine("~~~ CHECKING WEATHER ~~~");
                 WriteLine(GameEnvironment.FetchCurrentTempFromEnvironment());
-                WriteLine("Current Events: "+GameEnvironment.GenerateRandomEvent());
-                //CurrPlayer.RemovePlayerTurn();
-            //}
-            //else
-            //{
-            //    WriteLine("Unable to Perform Request.");
-            //}
+                WriteLine("Current Events: " + GameEnvironment.CurrentEvent);
+                CurrPlayer.RemovePlayerTurn();
+            }
+            else
+            {
+                WriteLine("Unable to Perform Request.");
+            }
 
             WaitForInput();
         }
@@ -161,11 +174,46 @@ namespace VirtualEcoSystem
 
         private void ConductEnvironmentActions()
         {
-            switch(PlayerOptions(new string[] { "Harvest x1 Yucca Plant. (-1 Turn)", "Collect x2 Moths.(-1 Turn)", "Return to office" }))
+            switch (PlayerOptions(new string[] { "Harvest x1 Yucca Plant. (-1 Turn)", "Collect x2 Moths.(-1 Turn)", "Return to office" }))
             {
                 case 1:
-                    WriteLine("You harvested a plant");
-                    WaitForInput();
+                    if (CurrPlayer.PlayerConstitutionCheck())
+                    {
+                        Plant toHarvest = null;
+                        foreach (var candidate in OrganismsList)
+                        {
+                            if (candidate.GetType().ToString().Equals("VirtualEcoSystem.Organisms.Plant"))
+                            {
+                                Plant tempCandidate = (Plant)candidate;
+                                if (tempCandidate.CanHarvest)
+                                {
+                                    WriteLine("Found a Plant.");
+                                    toHarvest = tempCandidate;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (toHarvest != null && toHarvest.CanHarvest)
+                        {
+                            WriteLine("You harvested a plant");
+                            CurrPlayer.AddItemFromPlant(toHarvest);
+                            CurrPlayer.RemovePlayerTurn();
+                            OrganismsList.Remove(toHarvest);
+                            WaitForInput();
+                        }
+                        else
+                        {
+                            WriteLine("No plants found, try again tomorrow.");
+                            WaitForInput();
+                        }
+                    }
+                    else
+                    {
+                        WriteLine("Unable to Perform Requested Action. Try again tomorrow.");
+                        WaitForInput();
+                    }
+
                     // recursive parent call
                     ConductEnvironmentCheck();
                     break;
@@ -178,7 +226,7 @@ namespace VirtualEcoSystem
                 case 3:
                     // return to main menu
                     return;
-                    //break;
+                //break;
                 default:
                     ConductEnvironmentCheck();
                     break;
@@ -191,11 +239,12 @@ namespace VirtualEcoSystem
             List<int> ToRemove = new List<int>();
             List<int> ToPollinate = new List<int>();
             // cycle through organisms list
-            foreach(var org in OrganismsList)
+            foreach (var org in OrganismsList)
             {
                 switch (org)
                 {
                     case Plant p:
+
                         if (DayCount % 2 == 0)
                         {
                             p.IncreasePlantAge();
@@ -210,22 +259,19 @@ namespace VirtualEcoSystem
                             ToPollinate.Add(OrganismsList.IndexOf(org));
                         }
                         break;
-                }
-                if (org.GetType() == typeof(Insect))
-                {
-                    var tempMoth = (Insect)org;
+                    case Insect bugg:
+                        bugg.IncreaseAge();
+                        bugg.ConductBirthday();
 
-                    tempMoth.IncreaseAge();
-                    tempMoth.ConductBirthday();
-
-                    if(tempMoth.Age > 12)
-                    {
-                        ToRemove.Add(OrganismsList.IndexOf(org));
-                    }
+                        if (bugg.Age > 12)
+                        {
+                            ToRemove.Add(OrganismsList.IndexOf(org));
+                        }
+                        break;
                 }
             }
 
-            foreach(int i in ToRemove)
+            foreach (int i in ToRemove)
             {
                 WriteLine($"{OrganismsList[i].Name} had died.");
                 OrganismsList.Remove(OrganismsList[i]);
