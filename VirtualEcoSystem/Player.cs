@@ -24,7 +24,7 @@ namespace VirtualEcoSystem
             OverageTurns= 3;
         }
 
-        public bool PlayerDexterityCheck()
+        public bool PlayerConstitutionCheck()
         {
             if (CurrentTurns + OverageTurns > 0)
             {

@@ -57,7 +57,7 @@ namespace VirtualEcoSystem
 
         public static int PlayerOptions(string[] playerOptions)
         {
-            WriteLine("What do you want to do?");
+            WriteLine("\nWhat do you want to do?");
 
             int count = 1;
             foreach(var option in playerOptions)

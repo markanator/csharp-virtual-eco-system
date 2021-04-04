@@ -42,30 +42,35 @@ namespace VirtualEcoSystem
 
         public string GenerateRandomEvent()
         {
-            if (CurrentTemp >= 100)
+            if (RandGen.Next(0,2).Equals(1))
             {
-                return "FIRE";
-            } 
-            else if (CurrentTemp < 100 && CurrentTemp >= 90)
-            {
-                return "DROUGHT";
-            }
-            else if (CurrentTemp < 90 && CurrentTemp >= 75)
-            {
-                // lets make is mostly sunny
-                return   "SUNNY";
-            }
-            else if (CurrentTemp < 75 && CurrentTemp >= 65)
-            {
-                int alternativeNum = RandGen.Next(0, 1);
-                return alternativeNum <= 0 ? "OVERCAST" : "FLOOD";
+                if (CurrentTemp >= 104)
+                {
+                    return "FIRE";
+                }
+                else if (CurrentTemp < 104 && CurrentTemp >= 99)
+                {
+                    return "DROUGHT";
+                }
+                else if (CurrentTemp < 99 && CurrentTemp >= 75)
+                {
+                    // lets make is mostly sunny
+                    return "SUNNY";
+                }
+                else if (CurrentTemp < 75 && CurrentTemp >= 65)
+                {
+                    int alternativeNum = RandGen.Next(0, 1);
+                    return alternativeNum <= 0 ? "OVERCAST" : "FLOOD";
+                }
+                else
+                {
+                    return "SUNNY";
+                }
             } 
             else
             {
-                return "SUNNY";
+                return "Normal Day";
             }
-
-            throw new NotImplementedException("Oops, no event thing caught");
         }
     }
 }

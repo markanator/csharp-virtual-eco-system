@@ -1,4 +1,9 @@
-﻿using System;
+﻿/*
+ * VirtEco
+ * By: Mark Ambrocio
+ * 
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +11,7 @@ using System.Threading.Tasks;
 using VirtualEcoSystem.Organisms;
 using static VirtualEcoSystem.ConsoleUIBuilder;
 using static System.Console;
+using Pastel;
 
 
 namespace VirtualEcoSystem
@@ -32,8 +38,6 @@ namespace VirtualEcoSystem
 
             GenerateInitialWildLife();
 
-
-
             StartGame();
         }
 
@@ -48,10 +52,9 @@ namespace VirtualEcoSystem
             while (IsPlaying)
             {
                 Clear();
-                PerformOrganismDailies();
                 WriteLine($"Day: {DayCount}");
                 DisplayPlayerTurns(CurrPlayer);
-                switch(PlayerOptions(new string[] { "Check Temperature. (Free)","Check Environment (Free)" }))
+                switch(PlayerOptions(new string[] { "Check Temperature. (Free)","Check Environment (Free)", "Exit Game" }))
                 {
                     case 1:
                         ConductWeatherCheck();
@@ -59,25 +62,35 @@ namespace VirtualEcoSystem
                     case 2:
                         ConductEnvironmentCheck();
                         break;
+                    case 3:
+                        this.IsPlaying = false;
+                        break;
                     default:
                         break;
                 }
                 
                 
 
-                // zero turns left?
+                // no turns left
                 if (CurrPlayer.CurrentTurns <= 0)
                 {
                     // add to day count
                     DayCount++;
                     // reset player health
                     CurrPlayer.CurrentTurns = CurrPlayer.MaxTurns;
+                    // perform daily organism actions
+                    PerformOrganismDailies();
                 }
                 if (!IsPlaying) break;
             }
 
-
-            WaitForInput();
+            Clear();
+            WaitForInput("Thanks for playing!\nVirtEco: Mojave Desert\nBy: Mark Ambrocio");
+        }
+        private void DisplayTopUI()
+        {
+            WriteLine($"Day: {DayCount}");
+            DisplayPlayerTurns(CurrPlayer);
         }
 
         private void GenerateInitialWildLife()
@@ -98,58 +111,78 @@ namespace VirtualEcoSystem
 
         private void ConductWeatherCheck()
         {
-            if (CurrPlayer.PlayerDexterityCheck())
-            {
+            //if (CurrPlayer.PlayerConstitutionCheck())
+            //{
                 WriteLine("~~~ CHECKING WEATHER ~~~");
                 WriteLine(GameEnvironment.FetchCurrentTempFromEnvironment());
-                WriteLine(GameEnvironment.GenerateRandomEvent());
-                CurrPlayer.RemovePlayerTurn();
-            }
-            else
-            {
-                WriteLine("Unable to Perform Request.");
-            }
+                WriteLine("Current Events: "+GameEnvironment.GenerateRandomEvent());
+                //CurrPlayer.RemovePlayerTurn();
+            //}
+            //else
+            //{
+            //    WriteLine("Unable to Perform Request.");
+            //}
 
             WaitForInput();
         }
 
         private void ConductEnvironmentCheck()
         {
-            if (CurrPlayer.PlayerDexterityCheck())
-            {
-                int plantCount = 0;
-                int mothCount = 0;
-                WriteLine("~~~ CHECKING Environment ~~~");
+            Clear();
+            DisplayTopUI();
+            int plantCount = 0;
+            int mothCount = 0;
+            WriteLine("\n~~~ CHECKING Environment ~~~".Pastel("#12c754"));
 
-                foreach (var org in OrganismsList)
+            foreach (var org in OrganismsList)
+            {
+                if (org.GetType().ToString().Contains("Plant"))
                 {
-                    if (org.GetType().ToString().Contains("Plant"))
-                    {
-                        plantCount++;
-                    }
-                    else if (org.GetType().ToString().Contains("Insect"))
-                    {
-                        mothCount++;
-                    }
+                    plantCount++;
                 }
-
-                int baseRatio = OrganismsList.Count;
-                WriteLine($"x{plantCount} - Yucca Plants");
-                WriteLine($"x{mothCount} - Yucca Moths");
-
-                int pRatio = Convert.ToInt32(((float)plantCount / (float)baseRatio) * 100);
-                int mRatio = Convert.ToInt32(((float)mothCount / (float)baseRatio) * 100);
-
-                WriteLine($"Plant Percentage:: {pRatio}%");
-                WriteLine($"Moth Percentage:: {mRatio}%");
-                CurrPlayer.RemovePlayerTurn();
+                else if (org.GetType().ToString().Contains("Insect"))
+                {
+                    mothCount++;
+                }
             }
-            else
+
+            int baseRatio = OrganismsList.Count;
+            WriteLine($"x{plantCount} - Yucca Plants");
+            WriteLine($"x{mothCount} - Yucca Moths");
+
+            int pRatio = Convert.ToInt32(((float)plantCount / (float)baseRatio) * 100);
+            int mRatio = Convert.ToInt32(((float)mothCount / (float)baseRatio) * 100);
+
+            WriteLine($"Plant Percentage:: {pRatio}%");
+            WriteLine($"Moth Percentage:: {mRatio}%");
+            //CurrPlayer.RemovePlayerTurn();
+            ConductEnvironmentActions();
+        }
+
+        private void ConductEnvironmentActions()
+        {
+            switch(PlayerOptions(new string[] { "Harvest x1 Yucca Plant. (-1 Turn)", "Collect x2 Moths.(-1 Turn)", "Return to office" }))
             {
-                WriteLine("Unable to Perform Request.");
+                case 1:
+                    WriteLine("You harvested a plant");
+                    WaitForInput();
+                    // recursive parent call
+                    ConductEnvironmentCheck();
+                    break;
+                case 2:
+                    WriteLine("You harvested a moth");
+                    WaitForInput();
+                    // recursive parent call
+                    ConductEnvironmentCheck();
+                    break;
+                case 3:
+                    // return to main menu
+                    return;
+                    //break;
+                default:
+                    ConductEnvironmentCheck();
+                    break;
             }
-
-            WaitForInput();
         }
 
         private void PerformOrganismDailies()
@@ -194,6 +227,7 @@ namespace VirtualEcoSystem
 
             foreach(int i in ToRemove)
             {
+                WriteLine($"{OrganismsList[i].Name} had died.");
                 OrganismsList.Remove(OrganismsList[i]);
             }
         }
