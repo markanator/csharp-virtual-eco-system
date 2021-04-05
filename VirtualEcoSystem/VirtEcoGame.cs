@@ -22,7 +22,7 @@ namespace VirtualEcoSystem
         public Environment GameEnvironment;
         public List<Organism> OrganismsList;
         public int DayCount;
-
+        public int AirMoisture = 5;
 
         public VirtEcoGame()
         {
@@ -129,6 +129,8 @@ namespace VirtualEcoSystem
                 WriteLine("~~~ CHECKING WEATHER ~~~");
                 WriteLine(GameEnvironment.FetchCurrentTempFromEnvironment());
                 WriteLine("Current Events: " + GameEnvironment.CurrentEvent);
+                // implement moisture check based on weather
+
                 CurrPlayer.RemovePlayerTurn();
             }
             else
@@ -137,6 +139,27 @@ namespace VirtualEcoSystem
             }
 
             WaitForInput();
+        }
+
+        private void CheckWeatherMoisture()
+        {
+            int amount = Utils.RandomGen.Next(-2,2);
+            AirMoisture += amount;
+            if (AirMoisture >= 7)
+            {
+                // rain fall
+                foreach(var plant in OrganismsList)
+                {
+                    switch (plant)
+                    {
+                        case Plant p:
+                            p.Hydration++;
+                            // check plant's hydration
+                            // over or low => dies
+                            break;
+                    }
+                }
+            }
         }
 
         private void ConductEnvironmentCheck()

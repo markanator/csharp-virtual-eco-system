@@ -5,11 +5,9 @@ namespace VirtualEcoSystem.Items
 {
     public class Item
     {
-        public string Name
-        {
-            get;
-            set;
-        }
+        public string Name;
+        public string Description;
+        public int UseLimit;
 
         public Dictionary<string, int> MaterialsRequiredToCraft;
     }

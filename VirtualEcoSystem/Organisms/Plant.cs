@@ -17,6 +17,7 @@ namespace VirtualEcoSystem.Organisms
         private int LifeCycleDayCount;
         public ReproductiveCycle CurrentLifeStage;
         public int TotalSeedsReleased;
+        public int Hydration;
 
         public Plant (string _name, string _desc): base(_name, _desc)
         {
