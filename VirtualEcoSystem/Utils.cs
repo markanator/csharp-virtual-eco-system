@@ -6,9 +6,11 @@ using static System.Console;
 
 namespace VirtualEcoSystem
 {
-    public class Utils
+    public static class Utils
     {
         public static Random RandomGen = new Random();
+
+        public static bool __PROD__ = false;
 
         public static void WaitForInput(){}
     }

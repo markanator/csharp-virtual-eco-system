@@ -28,6 +28,7 @@ namespace VirtualEcoSystem
         {
             this.Name = _name;
             this.Description = _desc;
+            this.CurrentEvent = "Normal Day";
             PerformDailyWeatherChange();
         }
 
