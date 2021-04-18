@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using VirtualEcoSystem.Organisms;
 using static System.Console;
 
 namespace VirtualEcoSystem
@@ -12,6 +13,20 @@ namespace VirtualEcoSystem
 
         public static bool __PROD__ = false;
 
-        public static void WaitForInput(){}
+        public static void RemoveOrgsFromMain(List<Organism> mainList, List<Organism> removeList)
+        {
+            foreach(var org in removeList)
+            {
+                mainList.Remove(org);
+            }
+        }
+
+        public static void AddOrgsToMain(List<Organism> mainList, List<Organism> newList)
+        {
+            foreach (var org in newList)
+            {
+                mainList.Add(org);
+            }
+        }
     }
 }

@@ -13,6 +13,9 @@ namespace VirtualEcoSystem.Events
             orgList.RemoveAll(og => og.GetType() == typeof(Plant));
             WriteLine("All plants have died...".Pastel("#c72e2e"));
 
+            // TODO
+            // kill all predators
+
             
             List<Organism> tempRemovalList = new List<Organism>();
 

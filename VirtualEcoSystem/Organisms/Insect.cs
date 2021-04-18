@@ -5,7 +5,7 @@ namespace VirtualEcoSystem.Organisms
     public class Insect : Organism
     {
 
-        private string[] LifeCycleStages = new string[]{ 
+        public string[] LifeCycleStages = new string[]{ 
             "EGG",           // 0
             "LARVA",         // 1
             "PUPA",          // 2
@@ -23,7 +23,7 @@ namespace VirtualEcoSystem.Organisms
             this.Name = _name;
             this.Description = _desc;
             this.Age = 1;
-            this.CurrentCycleStage = LifeCycleStages[1];
+            this.CurrentCycleStage = LifeCycleStages[0];
         }
         public Insect(string _name, string _desc, int _age) : base(_name, _desc,_age)
         {
