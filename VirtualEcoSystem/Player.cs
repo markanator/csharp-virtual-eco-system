@@ -64,9 +64,9 @@ namespace VirtualEcoSystem
 
         public void UseItem() { }
 
-        public void AddItemFromPlant(Plant _plant)
+        public void AddItemFromOrganism(Organism _org)
         {
-            if (_plant.Name == "Yucca Plant")
+            if (_org.Name == "Yucca Plant")
             {
                 if (Inventory.ContainsKey("Yucca Plant"))
                 {
@@ -77,6 +77,19 @@ namespace VirtualEcoSystem
                 {
                     // fresh insert => assign default value
                     Inventory.Add("Yucca Plant", 1);
+                }
+            } 
+            else if (_org.Name == "Yucca Moth")
+            {
+                if (Inventory.ContainsKey("Yucca Moth"))
+                {
+                    // already exists => add to it
+                    Inventory["Yucca Moth"] += 2;
+                }
+                else
+                {
+                    // fresh insert => assign default value
+                    Inventory.Add("Yucca Moth", 2);
                 }
             }
         }

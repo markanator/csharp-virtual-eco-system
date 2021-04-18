@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static VirtualEcoSystem.Utils;
+using VirtualEcoSystem.Organisms;
+using VirtualEcoSystem.Events;
 
 namespace VirtualEcoSystem
 {
     public class Environment
     {
         public string Name;
-        //public int GenerateRandomEvent;
         public string Description;
         public int CurrentTemp;
-        private Random RandGen = new Random();
         public List<int> AverageTempList = new List<int> { 
             82,
             94,
@@ -22,14 +23,13 @@ namespace VirtualEcoSystem
             86
             };
         public string CurrentEvent;
-        
 
         public Environment(string _name, string _desc)
         {
             this.Name = _name;
             this.Description = _desc;
             this.CurrentEvent = "Normal Day";
-            PerformDailyWeatherChange();
+            PerformDailyWeatherChange(true);
         }
 
         public string FetchCurrentTempFromEnvironment()
@@ -40,29 +40,42 @@ namespace VirtualEcoSystem
         // TODO, WEATHER SYSTEM using delegates?
         private string GenerateRandomEvent()
         {
-            if (RandGen.Next(0,3) >= 1)
+            if (RandomGen.Next(0,3) >= 1)
             {
                 if (CurrentTemp >= 104)
                 {
-                    return "FIRE";
+                    //Fire.CustomEvent(_orgList);
+                    return "Fire";
                 }
                 else if (CurrentTemp < 104 && CurrentTemp >= 99)
                 {
-                    return "DROUGHT";
+                    //Drought.CustomEvent(_orgList);
+                    return "Drought";
                 }
                 else if (CurrentTemp < 99 && CurrentTemp >= 75)
                 {
                     // lets make is mostly sunny
-                    return "SUNNY";
+                    //Sunny.CustomEvent(_orgList);
+                    return "Sunny";
                 }
                 else if (CurrentTemp < 75 && CurrentTemp >= 65)
                 {
-                    int alternativeNum = RandGen.Next(0, 1);
-                    return alternativeNum <= 0 ? "OVERCAST" : "FLOOD";
+                    int alternativeNum = RandomGen.Next(0, 2);
+                    if (alternativeNum <= 0)
+                    {
+                        //Overcast.CustomEvent(_orgList);
+                        return "Overcast";
+                    }
+                    else
+                    {
+                        //Flood.CustomEvent(_orgList);
+                        return "Flood";
+                    }
                 }
                 else
                 {
-                    return "SUNNY";
+                    //Sunny.CustomEvent(_orgList);
+                    return "Sunny";
                 }
             } 
             else
@@ -71,16 +84,42 @@ namespace VirtualEcoSystem
             }
         }
 
-        public void PerformDailyWeatherChange()
+        public void PerformDailyWeatherChange(bool _initial =false)
         {
             // get a temp from arr
-            int preTemp = AverageTempList[RandGen.Next(0, AverageTempList.Count - 1)];
+            int preTemp = AverageTempList[RandomGen.Next(0, AverageTempList.Count - 1)];
             // hold a temp value
-            int currTempIndex = preTemp > 85 ? 0 + RandGen.Next(11) : 0 - RandGen.Next(11);
+            int currTempIndex = preTemp > 85 ? 0 + RandomGen.Next(11) : 0 - RandomGen.Next(11);
             // assign temperature
             this.CurrentTemp = currTempIndex + preTemp;
             // generate an event, ran only once
-            this.CurrentEvent = GenerateRandomEvent();
+            this.CurrentEvent = _initial ? "Normal Day" : GenerateRandomEvent();
         }
+
+        public void PerformTemperatureEvent(List<Organism> _orglist)
+        {
+            switch (this.CurrentEvent)
+            {
+                case "Fire":
+                    Fire.CustomEvent(_orglist);
+                    break;
+                case "Drought":
+                    Drought.CustomEvent(_orglist);
+                    break;
+                case "Flood":
+                    Flood.CustomEvent(_orglist);
+                    break;
+                case "Overcast":
+                    Overcast.CustomEvent(_orglist);
+                    break;
+                case "Sunny":
+                    Sunny.CustomEvent(_orglist);
+                    break;
+                default:
+                    Console.WriteLine("Normal Day");
+                    break;
+            }
+        }
+
     }
 }

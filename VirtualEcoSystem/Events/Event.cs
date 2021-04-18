@@ -1,12 +1,18 @@
-﻿namespace VirtualEcoSystem.Events
+﻿using System.Collections.Generic;
+using VirtualEcoSystem.Organisms;
+using static System.Console;
+
+
+namespace VirtualEcoSystem.Events
 {
     public class Event
     {
 
         public string Name { get; set; }
 
-        public delegate void TriggerEvent();  
-
-        public virtual void CustomEvent(){}
+        public static void CustomEvent(List<Organism> _org)
+        {
+            WriteLine("GENERIC TEMPERATURE EVENT CALLED");
+        }
     }
 }

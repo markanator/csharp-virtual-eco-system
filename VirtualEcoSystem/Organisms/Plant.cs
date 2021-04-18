@@ -115,17 +115,17 @@ namespace VirtualEcoSystem.Organisms
             switch (_env.CurrentEvent)
             {
                 case "Normal Day":
-                case "FLOOD":
-                case "OVERCAST":
+                case "Flood":
+                case "Overcast":
                     if (!Utils.__PROD__) Console.WriteLine("water++");
                     this.Hydration += rand;
                     break;
-                case "DROUGHT":
-                case "SUNNY":
+                case "Drought":
+                case "Sunny":
                     if (!Utils.__PROD__) Console.WriteLine("water--");
                     this.Hydration -= rand;
                     break;
-                case "FIRE":
+                case "Fire":
                     if (!Utils.__PROD__) Console.WriteLine("burnt");
 
                     this.CurrentLifeStage = ReproductiveCycle.IMMINENT_DEATH;
