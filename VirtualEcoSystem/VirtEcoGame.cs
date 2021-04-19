@@ -13,6 +13,7 @@ using static VirtualEcoSystem.ConsoleUIBuilder;
 using static System.Console;
 using Pastel;
 using VirtualEcoSystem.Events;
+using VirtualEcoSystem.Items;
 
 namespace VirtualEcoSystem
 {
@@ -73,7 +74,7 @@ namespace VirtualEcoSystem
                         ConductEnvironmentCheck();
                         break;
                     case 3:
-                        CurrPlayer.CheckInventory();
+                        CurrPlayer.PInventory.PrintInventory();
                         WaitForInput();
                         break;
                     case 4:
@@ -239,7 +240,11 @@ namespace VirtualEcoSystem
                         if (plantToHarvest != null && plantToHarvest.CanHarvest)
                         {
                             WriteLine("You harvested a plant");
-                            CurrPlayer.AddItemFromOrganism(plantToHarvest);
+                            CurrPlayer.PInventory.AddItem(new Item { 
+                                Name = "Plant Leaf",
+                                CurrItemType = Item.ItemType.PlantLeaf,
+                                Amount = 1
+                            });
                             CurrPlayer.RemovePlayerTurn();
                             OrgList.Remove(plantToHarvest);
                             WaitForInput();
@@ -282,7 +287,12 @@ namespace VirtualEcoSystem
                         if (mothToCatach != null)
                         {
                             WriteLine("You collected a Moth");
-                            CurrPlayer.AddItemFromOrganism(mothToCatach);
+                            CurrPlayer.PInventory.AddItem(new Item
+                            {
+                                Name = "Moth Eggs",
+                                CurrItemType = Item.ItemType.MothEggs,
+                                Amount = 2
+                            });
                             CurrPlayer.RemovePlayerTurn();
                             OrgList.Remove(mothToCatach);
                             WaitForInput();

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using VirtualEcoSystem.Interfaces;
 using VirtualEcoSystem.Items;
 using VirtualEcoSystem.Organisms;
 using Pastel;
@@ -11,7 +10,8 @@ namespace VirtualEcoSystem
 {
     public class Player
     {
-        public Dictionary<string, int> Inventory;
+        //public Dictionary<string, int> Inventory;
+        public Inventory PInventory;
         public int MaxTurns;
         public int CurrentTurns;
         public int OverageTurns;
@@ -20,10 +20,12 @@ namespace VirtualEcoSystem
         public Player()
         {
             this.PlayerName = ConsoleUIBuilder.AskForPlayerName();
-            Inventory = new Dictionary<string, int>();
+            //Inventory = new Dictionary<string, int>();
             MaxTurns = 10;
             CurrentTurns = 10;
             OverageTurns = 3;
+
+            PInventory = new Inventory(UseItem);
         }
 
         public bool PlayerConstitutionCheck()
@@ -62,54 +64,42 @@ namespace VirtualEcoSystem
             }
         }
 
-        public void UseItem() { }
-
-        public void AddItemFromOrganism(Organism _org)
+        public void UseItem(Item item)
         {
-            if (_org.Name == "Yucca Plant")
+            switch (item.CurrItemType)
             {
-                if (Inventory.ContainsKey("Yucca Plant"))
-                {
-                    // already exists => add to it
-                    Inventory["Yucca Plant"] += 1;
-                }
-                else
-                {
-                    // fresh insert => assign default value
-                    Inventory.Add("Yucca Plant", 1);
-                }
-            } 
-            else if (_org.Name == "Yucca Moth")
-            {
-                if (Inventory.ContainsKey("Yucca Moth"))
-                {
-                    // already exists => add to it
-                    Inventory["Yucca Moth"] += 2;
-                }
-                else
-                {
-                    // fresh insert => assign default value
-                    Inventory.Add("Yucca Moth", 2);
-                }
+                case Item.ItemType.Bait:
+                    Console.WriteLine("Used Bait");
+                    // TODO make special X.type function
+                    PInventory.RemoveItem(new Item { Name = item.Name, Amount = 1, CurrItemType = Item.ItemType.Bait });
+                    break;
+                case Item.ItemType.GrilledMeat:
+                    Console.WriteLine("Used GrilledMeat");
+                    // TODO make special X.type function
+                    PInventory.RemoveItem(new Item { Name = item.Name, Amount = 1, CurrItemType = Item.ItemType.GrilledMeat });
+                    break;
+                case Item.ItemType.MothEggs:
+                    Console.WriteLine("Used MothEggs");
+                    // TODO make special X.type function
+                    PInventory.RemoveItem(new Item { Name = item.Name, Amount = 1, CurrItemType = Item.ItemType.MothEggs });
+                    break;
+                case Item.ItemType.PlantHealingPotion:
+                    Console.WriteLine("Used PlantHealingPotion");
+                    // TODO make special X.type function
+                    PInventory.RemoveItem(new Item { Name = item.Name, Amount = 1, CurrItemType = Item.ItemType.PlantHealingPotion });
+                    break;
+                case Item.ItemType.PlantLeaf:
+                    Console.WriteLine("Used PlantLeaf");
+                    // TODO make special X.type function
+                    PInventory.RemoveItem(new Item { Name = item.Name, Amount = 1, CurrItemType = Item.ItemType.PlantLeaf });
+                    break;
+                case Item.ItemType.Trap:
+                    Console.WriteLine("Used Trap");
+                    // TODO make special X.type function
+                    PInventory.RemoveItem(new Item { Name = item.Name, Amount = 1, CurrItemType = Item.ItemType.Trap });
+                    break;
             }
         }
 
-        public void CheckInventory()
-        {
-            Console.WriteLine("~~~ Checking Inventory ~~~".Pastel("#b642f5"));
-            if (this.Inventory.Count > 0)
-            {
-                foreach (var item in this.Inventory)
-                {
-                    Console.WriteLine($"x{item.Value} - {item.Key}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Nothing found.");
-            }
-            
-            Console.WriteLine("~~~ END REPORT ~~~".Pastel("#792ca3"));
-        }
     }
 }
