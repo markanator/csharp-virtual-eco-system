@@ -432,36 +432,44 @@ namespace VirtualEcoSystem
         private void ConductPlantMothRatioCheck()
         {
             Dictionary<string, int> ObligateRatios = PerformObligateRatioCalc();
+
+            // moth to plant
+            bool mothsAcceptableRange = ObligateRatios["mRatio"] + 10 < ObligateRatios["pRatio"] || ObligateRatios["mRatio"] - 10 < ObligateRatios["pRatio"];
+            bool mothsDangerRange = ObligateRatios["mRatio"] >= 85 && ObligateRatios["mRatio"] > ObligateRatios["pRatio"];
+            bool mothsWarningRange = ObligateRatios["mRatio"] >= 70 && ObligateRatios["mRatio"] > ObligateRatios["pRatio"];
+            bool mothsAttentionRange = ObligateRatios["mRatio"] >= 55 && ObligateRatios["mRatio"] > ObligateRatios["pRatio"];
+            // plant to moth
+            bool plantsAcceptableRange = ObligateRatios["pRatio"] + 10 < ObligateRatios["mRatio"] || ObligateRatios["pRatio"] - 10 < ObligateRatios["mRatio"];
+            bool plantsDangerRange = ObligateRatios["pRatio"] >= 85 && ObligateRatios["pRatio"] > ObligateRatios["mRatio"];
+            bool plantsWarningRange = ObligateRatios["pRatio"] >= 70 && ObligateRatios["pRatio"] > ObligateRatios["mRatio"];
+            bool plantsAttentionRange = ObligateRatios["pRatio"] >= 55 && ObligateRatios["pRatio"] > ObligateRatios["mRatio"];
+
             string msg;
             // if there are too many moths, compared to plants
-            if (ObligateRatios["mRatio"]+10 < ObligateRatios["pRatio"] || ObligateRatios["mRatio"] - 10 < ObligateRatios["pRatio"])
+            if (mothsAcceptableRange && plantsAcceptableRange)
             {
-                msg = "\nMoth to plant ratio ok".Pastel("#12c754");
+                msg = "\nMoth to Plant ratio ok".Pastel("#12c754");
                 WriteLine(msg);
             }
-            else if (ObligateRatios["mRatio"] >= 85 && ObligateRatios["mRatio"] > ObligateRatios["pRatio"])
+            else if (mothsDangerRange || plantsDangerRange)
             {
                 msg = "Warning! Environment out of balance, organism extinction imminent.".Pastel("#D50000");
                 WriteLine("\n"+msg);
                 PlantMothRatioMsg = msg;
             }
-            else if (ObligateRatios["mRatio"] >= 70 && ObligateRatios["mRatio"] > ObligateRatios["pRatio"])
+            else if (mothsWarningRange || plantsWarningRange)
             {
                 msg = "Fix ratio before its too late".Pastel("#FF3333");
                 WriteLine("\n" + msg);
                 PlantMothRatioMsg = msg;
             }
-            else if (ObligateRatios["mRatio"] >= 55 && ObligateRatios["mRatio"] > ObligateRatios["pRatio"])
+            else if (mothsAttentionRange || plantsAttentionRange)
             {
                 // warning
-                msg = "Too many moths!".Pastel("#FFA733");
+                msg = "Too many of one species!".Pastel("#FFA733");
                 WriteLine("\n" + msg);
                 PlantMothRatioMsg = msg;
             }
-            
-            // moths start dying
-            // if there are too many plants, compared to moths
-            // plants start to die
         }
 
         private Dictionary<string, int> PerformObligateRatioCalc()
