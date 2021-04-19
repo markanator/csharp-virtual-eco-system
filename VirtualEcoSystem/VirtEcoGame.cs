@@ -432,17 +432,21 @@ namespace VirtualEcoSystem
         private void ConductPlantMothRatioCheck()
         {
             Dictionary<string, int> ObligateRatios = PerformObligateRatioCalc();
+            int acceptRange = 8;
+            int dangerAmount = 85;
+            int warnAmount = 65;
+            int attenAmount = 55;
 
             // moth to plant
-            bool mothsAcceptableRange = ObligateRatios["mRatio"] + 10 < ObligateRatios["pRatio"] || ObligateRatios["mRatio"] - 10 < ObligateRatios["pRatio"];
-            bool mothsDangerRange = ObligateRatios["mRatio"] >= 85 && ObligateRatios["mRatio"] > ObligateRatios["pRatio"];
-            bool mothsWarningRange = ObligateRatios["mRatio"] >= 70 && ObligateRatios["mRatio"] > ObligateRatios["pRatio"];
-            bool mothsAttentionRange = ObligateRatios["mRatio"] >= 55 && ObligateRatios["mRatio"] > ObligateRatios["pRatio"];
+            bool mothsAcceptableRange = ObligateRatios["mRatio"] + acceptRange < ObligateRatios["pRatio"] || ObligateRatios["mRatio"] - acceptRange < ObligateRatios["pRatio"];
+            bool mothsDangerRange = ObligateRatios["mRatio"] >= dangerAmount && ObligateRatios["mRatio"] > ObligateRatios["pRatio"];
+            bool mothsWarningRange = ObligateRatios["mRatio"] >= warnAmount && ObligateRatios["mRatio"] > ObligateRatios["pRatio"];
+            bool mothsAttentionRange = ObligateRatios["mRatio"] >= attenAmount && ObligateRatios["mRatio"] > ObligateRatios["pRatio"];
             // plant to moth
-            bool plantsAcceptableRange = ObligateRatios["pRatio"] + 10 < ObligateRatios["mRatio"] || ObligateRatios["pRatio"] - 10 < ObligateRatios["mRatio"];
-            bool plantsDangerRange = ObligateRatios["pRatio"] >= 85 && ObligateRatios["pRatio"] > ObligateRatios["mRatio"];
-            bool plantsWarningRange = ObligateRatios["pRatio"] >= 70 && ObligateRatios["pRatio"] > ObligateRatios["mRatio"];
-            bool plantsAttentionRange = ObligateRatios["pRatio"] >= 55 && ObligateRatios["pRatio"] > ObligateRatios["mRatio"];
+            bool plantsAcceptableRange = ObligateRatios["pRatio"] + acceptRange < ObligateRatios["mRatio"] || ObligateRatios["pRatio"] - acceptRange < ObligateRatios["mRatio"];
+            bool plantsDangerRange = ObligateRatios["pRatio"] >= dangerAmount && ObligateRatios["pRatio"] > ObligateRatios["mRatio"];
+            bool plantsWarningRange = ObligateRatios["pRatio"] >= warnAmount && ObligateRatios["pRatio"] > ObligateRatios["mRatio"];
+            bool plantsAttentionRange = ObligateRatios["pRatio"] >= attenAmount && ObligateRatios["pRatio"] > ObligateRatios["mRatio"];
 
             string msg;
             // if there are too many moths, compared to plants
@@ -450,6 +454,7 @@ namespace VirtualEcoSystem
             {
                 msg = "\nMoth to Plant ratio ok".Pastel("#12c754");
                 WriteLine(msg);
+                PlantMothRatioMsg = "No new messages.";
             }
             else if (mothsDangerRange || plantsDangerRange)
             {
