@@ -47,6 +47,12 @@ namespace VirtualEcoSystem.Events
                 count++;
             }
 
+            int deathToll = OrgsToDelete.Count;
+            // delete orgs
+            Utils.RemoveOrgsFromMain(_orgList,OrgsToDelete);
+            // reset removalList
+            OrgsToDelete.Clear();
+            WriteLine($"{deathToll} organisms removed...");
         }
 
     }

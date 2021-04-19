@@ -51,6 +51,8 @@ namespace VirtualEcoSystem.Events
             int deathtoll = OrgsToDelete.Count;
             // delete orgs
             Utils.RemoveOrgsFromMain(_orgList, OrgsToDelete);
+            // reset removalList
+            OrgsToDelete.Clear();
 
             WriteLine($"{deathtoll} organisms died...");
         }

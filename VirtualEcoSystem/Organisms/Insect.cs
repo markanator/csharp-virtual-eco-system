@@ -42,25 +42,28 @@ namespace VirtualEcoSystem.Organisms
 
         public void ConductBirthday()
         {
-            // a function that checks the age and updates if necesary
-            if (Age >= 6 && Age <= 8)
+            // if you're am egg/larva/pupa
+            if (this.CurrentCycleStage != LifeCycleStages[6] && !this.CurrentCycleStage.Contains("ADULT"))
             {
-                this.CurrentCycleStage = LifeCycleStages[3];
-            }
-            else if (Age < 6 && Age >= 4)
-            {
-                this.CurrentCycleStage = LifeCycleStages[2];
-            }
-            else if (Age < 4 && Age >= 2)
-            {
-                this.CurrentCycleStage = LifeCycleStages[1];
-            }
-            else if (Age < 2)
-            {
-                this.CurrentCycleStage = LifeCycleStages[0];
-            }
-
-            if (this.CurrentCycleStage == LifeCycleStages[3] && this.DaysInCycle > 2)
+                // a function that checks the age and updates if necesary
+                if (Age >= 6 && Age <= 8)
+                {
+                    this.CurrentCycleStage = LifeCycleStages[3];
+                }
+                else if (Age < 6 && Age >= 4)
+                {
+                    this.CurrentCycleStage = LifeCycleStages[2];
+                }
+                else if (Age < 4 && Age >= 2)
+                {
+                    this.CurrentCycleStage = LifeCycleStages[1];
+                }
+                else if (Age < 2)
+                {
+                    this.CurrentCycleStage = LifeCycleStages[0];
+                }
+            } 
+            else if (this.CurrentCycleStage == LifeCycleStages[3] && this.DaysInCycle >= 2)
             {
                 this.CurrentCycleStage = LifeCycleStages[4];
             }

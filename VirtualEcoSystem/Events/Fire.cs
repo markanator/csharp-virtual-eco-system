@@ -13,11 +13,8 @@ namespace VirtualEcoSystem.Events
             orgList.RemoveAll(og => og.GetType() == typeof(Plant));
             WriteLine("All plants have died...".Pastel("#c72e2e"));
 
-            // TODO
-            // kill all predators
-
             
-            List<Organism> tempRemovalList = new List<Organism>();
+            List<Organism> OrgsToRemove = new List<Organism>();
 
             // add to death toll
             int count = 0;
@@ -28,7 +25,7 @@ namespace VirtualEcoSystem.Events
                     case Insect bug:
                         if (count % 2 == 0)
                         {
-                            tempRemovalList.Add(bug);
+                            OrgsToRemove.Add(bug);
                         }
                         break;
                     default:
@@ -37,16 +34,12 @@ namespace VirtualEcoSystem.Events
                 count++;
             }
 
-            int deathToll = tempRemovalList.Count;
+            int deathToll = OrgsToRemove.Count;
 
             // remove all bugs from ogList
-            foreach(var org2 in tempRemovalList)
-            {
-                orgList.Remove(org2);
-            }
-
+            Utils.RemoveOrgsFromMain(orgList,OrgsToRemove);
             // reset removalList
-            tempRemovalList.Clear();
+            OrgsToRemove.Clear();
 
             WriteLine($"Moth death toll:: {deathToll}".Pastel("#c72e2e"));
         }

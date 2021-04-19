@@ -19,6 +19,8 @@ namespace VirtualEcoSystem
             {
                 mainList.Remove(org);
             }
+
+            mainList.OrderBy(org => org.GetType());
         }
 
         public static void AddOrgsToMain(List<Organism> mainList, List<Organism> newList)
@@ -27,6 +29,13 @@ namespace VirtualEcoSystem
             {
                 mainList.Add(org);
             }
+
+            mainList.OrderBy(org => org.GetType());
         }
+
+
     }
+
+
+
 }

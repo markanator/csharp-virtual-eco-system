@@ -33,6 +33,7 @@ namespace VirtualEcoSystem
                         break;
                     case Insect bug:
                         bug.CurrentCycleStage = bug.LifeCycleStages[3];
+                        bug.DaysInCycle = 0;
                         
                         // TODO
                         // increase chance of being eaten by Lizards
@@ -42,12 +43,18 @@ namespace VirtualEcoSystem
                 }
                 count++;
             }
+
             int deathToll = OrgsToDelete.Count;
             int freshMeat = FreshOrgs.Count;
             // delete orgs
             Utils.RemoveOrgsFromMain(_orgList, OrgsToDelete);
             // add to list
             Utils.AddOrgsToMain(_orgList, FreshOrgs);
+
+            // reset removalList
+            FreshOrgs.Clear();
+            OrgsToDelete.Clear();
+
             WriteLine($"{deathToll} removed from the world...");
             WriteLine($"{freshMeat} added to the world...");
         }

@@ -312,7 +312,6 @@ namespace VirtualEcoSystem
             }
         }
 
-        // can move to other file
         private void PerformOrganismDailies()
         {
             // List<int> Orgs to remove // a collection of indexes to remove

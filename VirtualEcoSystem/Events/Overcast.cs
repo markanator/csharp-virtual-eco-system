@@ -40,6 +40,10 @@ namespace VirtualEcoSystem.Events
             Utils.RemoveOrgsFromMain(_orgList, OrgsToDelete);
             // add to list
             Utils.AddOrgsToMain(_orgList, FreshOrgs);
+            // reset removalList
+            OrgsToDelete.Clear();
+            FreshOrgs.Clear();
+
             WriteLine($"{deathToll} removed from the world...");
             WriteLine($"{freshMeat} added to the world...");
         }
