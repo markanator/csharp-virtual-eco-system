@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>desert.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Pastel, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Pastel.2.1.0\lib\netstandard2.0\Pastel.dll</HintPath>
@@ -47,20 +50,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleUIBuilder.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="GameMaster.cs" />
+    <Compile Include="Utils\ConsoleUIBuilder.cs" />
+    <Compile Include="Entity\Game.cs" />
     <Compile Include="Interfaces\IItemContainer.cs" />
     <Compile Include="InventorySystem\CraftingRecipe.cs" />
     <Compile Include="InventorySystem\Inventory.cs" />
     <Compile Include="Organisms\Bird.cs" />
     <Compile Include="Events\Drought.cs" />
-    <Compile Include="Environment.cs" />
+    <Compile Include="Entity\Environment.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\Fire.cs" />
     <Compile Include="Events\Flood.cs" />
-    <Compile Include="HarvestLeaves.cs" />
-    <Compile Include="Interfaces\ICollectable.cs" />
     <Compile Include="Interfaces\IHarvestable.cs" />
     <Compile Include="Organisms\Insect.cs" />
     <Compile Include="InventorySystem\Item.cs" />
@@ -68,13 +68,12 @@
     <Compile Include="Organisms\Organism.cs" />
     <Compile Include="Events\Overcast.cs" />
     <Compile Include="Organisms\Plant.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Entity\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Organisms\Rabbit.cs" />
     <Compile Include="Events\Sunny.cs" />
-    <Compile Include="TriggerEvent.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="Utils\Utils.cs" />
     <Compile Include="VirtEcoGame.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +81,8 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="desert.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,7 +3,7 @@ using System;
 
 namespace VirtualEcoSystem.Organisms
 {
-    public class Plant : Organism, IHarvestable
+    public class Plant : Organism
     {
         public int PlantAge { get; private set;}
         public bool CanHarvest { get; set; }

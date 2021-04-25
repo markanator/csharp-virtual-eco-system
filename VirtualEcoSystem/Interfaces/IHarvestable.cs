@@ -9,6 +9,6 @@ namespace VirtualEcoSystem
     {
         bool CanHarvest { get; set; }
 
-        string HarvestXItem();
+        void HarvestXItem();
     }
 }

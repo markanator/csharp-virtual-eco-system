@@ -10,8 +10,8 @@
   <Class Name="VirtualEcoSystem.Environment">
     <Position X="12" Y="0.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAA0ABAIABAAAAQAAAAAAAAAAAAAAAAAAQg=</HashCode>
-      <FileName>Environment.cs</FileName>
+      <HashCode>AAAAAAAAAAA0AAAIABAAAAQAAAAAAAAAAgAAAAAAAQg=</HashCode>
+      <FileName>Entity\Environment.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="VirtualEcoSystem.Organisms.Organism">
@@ -24,15 +24,22 @@
   <Class Name="VirtualEcoSystem.Player">
     <Position X="14.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAEAAAQAgAAAAAACAAAAAAgABAAAQAAwAAAAAgABAAA=</HashCode>
-      <FileName>Player.cs</FileName>
+      <HashCode>ABEAAAQAgAAAAAACAAAAAAgAAAAAQAAwAAAAAAAAAAA=</HashCode>
+      <FileName>Entity\Player.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="VirtualEcoSystem.Items.Item">
     <Position X="1.75" Y="8.25" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="VirtualEcoSystem.Items.Item.ItemType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>InventorySystem\Item.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAgAAAAACAAAAQAAAAAAAAAABAAAAAAAAA=</HashCode>
-      <FileName>Items\Item.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAASAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>InventorySystem\Item.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="VirtualEcoSystem.Events.Event">
@@ -40,13 +47,6 @@
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
-    <NestedTypes>
-      <Delegate Name="VirtualEcoSystem.Events.Event.TriggerEvent" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Events\Event.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAABAAAAAAAAAAAAAA=</HashCode>
       <FileName>Events\Event.cs</FileName>
@@ -62,10 +62,9 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>ABAAQAACEAIAAAAAAAEAAABAAAAAAAAAAAACIgAAAQA=</HashCode>
+      <HashCode>ABAAQAACEAIAAAAAAAEAAABAAAAAAAABAAACIgAAAQA=</HashCode>
       <FileName>Organisms\Plant.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.1" />
   </Class>
   <Class Name="VirtualEcoSystem.Organisms.Insect">
     <Position X="5.5" Y="3.75" Width="1.5" />
@@ -78,7 +77,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAgAAAAAAAAAAQAAAAAAAABAAAAAAAAAAAAFAAAAAAA=</HashCode>
+      <HashCode>AAgAAAAAAAAAAQAAAAAAAABAAAAAAEAAAAAFAAAAAAA=</HashCode>
       <FileName>Organisms\Insect.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -225,33 +224,15 @@
   </Class>
   <Class Name="VirtualEcoSystem.Events.Drought">
     <Position X="4" Y="10.75" Width="1.5" />
-    <InheritanceLine Type="VirtualEcoSystem.Events.Event" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="3.5" Y="11.577" />
-        <Point X="3.623" Y="11.577" />
-        <Point X="3.623" Y="11.87" />
-        <Point X="4.75" Y="11.87" />
-        <Point X="4.75" Y="11.747" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
       <FileName>Events\Drought.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="VirtualEcoSystem.Events.Flood">
     <Position X="5.75" Y="10.75" Width="1.5" />
-    <InheritanceLine Type="VirtualEcoSystem.Events.Event" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="3.5" Y="11.651" />
-        <Point X="3.623" Y="11.651" />
-        <Point X="3.623" Y="11.87" />
-        <Point X="6.5" Y="11.87" />
-        <Point X="6.5" Y="11.747" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
       <FileName>Events\Flood.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -267,7 +248,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
       <FileName>Events\Fire.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -283,7 +264,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
       <FileName>Events\Overcast.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -296,19 +277,8 @@
   </Class>
   <Class Name="VirtualEcoSystem.Sunny">
     <Position X="7.5" Y="10.75" Width="1.5" />
-    <InheritanceLine Type="VirtualEcoSystem.Events.Event" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="3.5" Y="11.651" />
-        <Point X="3.691" Y="11.651" />
-        <Point X="3.691" Y="11.885" />
-        <Point X="7.844" Y="11.885" />
-        <Point X="7.844" Y="11.987" />
-        <Point X="8.25" Y="11.987" />
-        <Point X="8.25" Y="11.747" />
-      </Path>
-    </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
       <FileName>Events\Sunny.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -331,17 +301,10 @@
   <Class Name="VirtualEcoSystem.Utils">
     <Position X="3.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAQAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Utils.cs</FileName>
+      <HashCode>AAAAAAAAAAUAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Utils\Utils.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Interface Name="VirtualEcoSystem.Interfaces.ICollectable">
-    <Position X="5.5" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Interfaces\ICollectable.cs</FileName>
-    </TypeIdentifier>
-  </Interface>
   <Interface Name="VirtualEcoSystem.IHarvestable">
     <Position X="7.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
