@@ -11,10 +11,11 @@ using System.IO;
 
 namespace VirtualEcoSystem.Entity
 {
+    [Serializable]
     class Market
     {
         //private List<Item> MerchantStock;
-        // ex: Water: [x25, $2]
+        // ex: Water{WaterBottleType, x20} : $5
         private Dictionary<Item,int> MerchantStock;
         private int Cash;
         public Market()

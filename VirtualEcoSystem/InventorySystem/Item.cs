@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using VirtualEcoSystem.Interfaces;
 
 namespace VirtualEcoSystem.Items
 {
+    [Serializable]
     public class Item
     {
         public enum ItemType

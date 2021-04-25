@@ -51,8 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entity\Market.cs" />
-    <Compile Include="FileSystem\BinaryFormatter.cs" />
-    <Compile Include="FileSystem\FileInitializer.cs" />
+    <Compile Include="FileSystem\SaveState.cs" />
     <Compile Include="Utils\ConsoleUIBuilder.cs" />
     <Compile Include="Entity\Game.cs" />
     <Compile Include="Interfaces\IItemContainer.cs" />
@@ -60,7 +59,7 @@
     <Compile Include="InventorySystem\Inventory.cs" />
     <Compile Include="Organisms\Bird.cs" />
     <Compile Include="Events\Drought.cs" />
-    <Compile Include="Entity\Environment.cs" />
+    <Compile Include="Entity\Enviro.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\Fire.cs" />
     <Compile Include="Events\Flood.cs" />

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.IO;
 using VirtualEcoSystem.Organisms;
 using static System.Console;
 
@@ -9,6 +9,8 @@ namespace VirtualEcoSystem
 {
     public static class Utils
     {
+        public static string SaveGameFile = "savegame.txt";
+
         public static Random RandomGen = new Random();
 
         public static bool __PROD__ = false;
@@ -31,6 +33,23 @@ namespace VirtualEcoSystem
             }
 
             mainList.OrderBy(org => org.GetType());
+        }
+
+        public static bool SaveFileExsists()
+        {
+            Console.WriteLine("Checking for savegame data...");
+
+            if (File.Exists(Utils.SaveGameFile))
+            {
+                Console.WriteLine("Save Game Found");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Missing Save File");
+                //CreateNewSaveFile();
+                return false;
+            }
         }
 
 

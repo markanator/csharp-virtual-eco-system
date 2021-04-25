@@ -3,6 +3,7 @@ using VirtualEcoSystem.Interfaces;
 
 namespace VirtualEcoSystem.Organisms
 {
+    [Serializable]
     public class Organism 
     {
         public string Name;

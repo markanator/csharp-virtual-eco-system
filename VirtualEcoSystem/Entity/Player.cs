@@ -6,8 +6,9 @@ using VirtualEcoSystem.Items;
 using VirtualEcoSystem.Organisms;
 using Pastel;
 
-namespace VirtualEcoSystem
+namespace VirtualEcoSystem.Entity
 {
+    [Serializable]
     public class Player
     {
         public Inventory PInventory;

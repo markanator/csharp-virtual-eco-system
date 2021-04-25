@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
 using Color = System.Drawing.Color;
+using VirtualEcoSystem.Entity;
 
 
 namespace VirtualEcoSystem

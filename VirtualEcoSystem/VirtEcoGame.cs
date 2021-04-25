@@ -10,38 +10,59 @@ using Pastel;
 using VirtualEcoSystem.Items;
 using VirtualEcoSystem.Organisms;
 using VirtualEcoSystem.Entity;
+using VirtualEcoSystem.FileSystem;
 using static VirtualEcoSystem.ConsoleUIBuilder;
 using static System.Console;
+using System.IO;
 
 namespace VirtualEcoSystem
 {
+    [Serializable]
     class VirtEcoGame : Game
     {
         private Player CurrPlayer;
-        private Environment CurrEnv;
+        private Enviro CurrEnv;
         private List<Organism> OrgList;
-        private int DayCount;
+        private int DayCount = 1;
         private int AirMoisture = 5;
-        private string PlantMothRatioMsg;
+        private string PlantMothRatioMsg = "No new messages.";
 
-        private bool WantsToSkip = false;
         private Market DesertMarket;
+        [NonSerialized]
+        private bool WantsToSkip = false;
+        private SaveState SaveData;
+
 
         public VirtEcoGame()
         {
-            CurrPlayer = new Player();
-            DesertMarket = new Market();
-            Setup();
-        }
+            if (Utils.SaveFileExsists())
+            {
+                // Save Game found, lets load from it
+                LoadContent();
 
-        public override void Setup()
-        {
-            CurrEnv = new Environment("Desert", "Its hot here.");
-            OrgList = new List<Organism>();
-            DayCount = 1;
+                CurrPlayer = SaveData.CurrPlayer;
+                CurrEnv = SaveData.CurrEnv;
+                OrgList = SaveData.OrgList;
+                DayCount = SaveData.DayCount;
+                AirMoisture = SaveData.AirMoisture;
+                PlantMothRatioMsg = SaveData.PlantMothRatioMsg;
 
-            GenerateWildLife(true);
+                DesertMarket = SaveData.DesertMarket;
+            }
+            else
+            {
+                // otherwise, lets create new set of data
+                CurrPlayer = new Player();
+                CurrEnv = new Enviro("Desert", "Its hot here.");
+                OrgList = new List<Organism>();
+                DesertMarket = new Market();
 
+                GenerateWildLife(true);
+            }
+
+            // regaardless of above, lets save the game...
+            SaveGame();
+            // and start playing!
             StartGame();
         }
 
@@ -124,7 +145,9 @@ namespace VirtualEcoSystem
                     ConductPlantMothRatioCheck();
 
                     //
-                    if (!Utils.__PROD__) WaitForInput();
+                    if (!Utils.__PROD__) WaitForInput("~~~~~~ END DEV STATS ~~~~~~\nPress any key to return...");
+                    // save game
+                    SaveGame();
 
                 }
                 if (!IsPlaying) break;
@@ -132,6 +155,56 @@ namespace VirtualEcoSystem
 
             Clear();
             WaitForInput("Thanks for playing!\nVirtEco: Mojave Desert\nBy: Mark Ambrocio");
+        }
+
+        private void SaveGame()
+        {
+            // no file, create a new one
+            if (SaveData == null)
+            {
+                SaveData = new SaveState();
+            }
+            
+            // set data we want to save
+            SaveData.LasteSaved = DateTime.Now;
+            SaveData.CurrPlayer = CurrPlayer;
+            SaveData.CurrEnv = CurrEnv;
+            SaveData.AirMoisture = AirMoisture;
+            SaveData.DayCount = DayCount;
+            SaveData.DesertMarket = DesertMarket;
+            SaveData.OrgList = OrgList;
+            SaveData.PlantMothRatioMsg = PlantMothRatioMsg;
+
+            FileStream saveFile = File.Open(Utils.SaveGameFile, FileMode.OpenOrCreate, FileAccess.Write);
+            var bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+            
+            // save content
+            bf.Serialize(saveFile, SaveData);
+            // close stream
+            saveFile.Close();
+
+            //WaitForInput("Game saved successfully.\nPress Any key to continue...");
+        }
+
+        private void LoadContent()
+        {
+            try
+            {
+                // attempt to read from file
+                FileStream loadFile = File.Open(Utils.SaveGameFile, FileMode.Open, FileAccess.Read);
+                var bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                // load savestate from file
+                SaveData = (SaveState)bf.Deserialize(loadFile);
+                loadFile.Close();
+
+                WaitForInput("Successfully Loaded File.\nPress Any key to continue...");
+            } 
+            catch
+            {
+                // if any errors, just run savegame
+                SaveGame();
+            }
+
         }
 
         private void DisplayTopUI()

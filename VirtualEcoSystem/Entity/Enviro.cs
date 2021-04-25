@@ -6,9 +6,10 @@ using static VirtualEcoSystem.Utils;
 using VirtualEcoSystem.Organisms;
 using VirtualEcoSystem.Events;
 
-namespace VirtualEcoSystem
+namespace VirtualEcoSystem.Entity
 {
-    public class Environment
+    [Serializable]
+    public class Enviro
     {
         public string Name;
         public string Description;
@@ -24,7 +25,8 @@ namespace VirtualEcoSystem
             };
         public string CurrentEvent;
 
-        public Environment(string _name, string _desc)
+        public Enviro() { }
+        public Enviro(string _name, string _desc)
         {
             this.Name = _name;
             this.Description = _desc;

@@ -1,8 +1,10 @@
 ﻿using Pastel;
 using System;
+using VirtualEcoSystem.Entity;
 
 namespace VirtualEcoSystem.Organisms
 {
+    [Serializable]
     public class Plant : Organism
     {
         public int PlantAge { get; private set;}
@@ -108,7 +110,7 @@ namespace VirtualEcoSystem.Organisms
             return $"{this.Name} was harvested!";
         }
 
-        public void EnvironmentHydratation(Environment _env, int _airMoisture)
+        public void EnvironmentHydratation(Enviro _env, int _airMoisture)
         {
             int rand = Utils.RandomGen.Next(-Math.Abs(_airMoisture), Math.Abs(_airMoisture));
 

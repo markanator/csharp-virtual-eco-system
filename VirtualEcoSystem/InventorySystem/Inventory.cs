@@ -11,6 +11,7 @@ using VirtualEcoSystem.Interfaces;
 
 namespace VirtualEcoSystem.Items
 {
+    [Serializable]
     public class Inventory : IItemContainer
     {
         // delegate to updateUI

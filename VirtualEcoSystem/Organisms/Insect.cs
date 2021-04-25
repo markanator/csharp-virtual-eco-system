@@ -2,6 +2,7 @@
 
 namespace VirtualEcoSystem.Organisms
 {
+    [Serializable]
     public class Insect : Organism
     {
 
