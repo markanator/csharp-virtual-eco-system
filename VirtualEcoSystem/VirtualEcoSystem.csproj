@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entity\Market.cs" />
     <Compile Include="Utils\ConsoleUIBuilder.cs" />
     <Compile Include="Entity\Game.cs" />
     <Compile Include="Interfaces\IItemContainer.cs" />
@@ -82,6 +83,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\Merchant.txt" />
     <Content Include="desert.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

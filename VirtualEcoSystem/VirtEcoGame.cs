@@ -6,14 +6,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Pastel;
+using VirtualEcoSystem.Items;
 using VirtualEcoSystem.Organisms;
+using VirtualEcoSystem.Entity;
 using static VirtualEcoSystem.ConsoleUIBuilder;
 using static System.Console;
-using Pastel;
-using VirtualEcoSystem.Events;
-using VirtualEcoSystem.Items;
 
 namespace VirtualEcoSystem
 {
@@ -27,10 +25,12 @@ namespace VirtualEcoSystem
         private string PlantMothRatioMsg;
 
         private bool WantsToSkip = false;
+        private Market DesertMarket;
 
         public VirtEcoGame()
         {
             CurrPlayer = new Player();
+            DesertMarket = new Market();
             Setup();
         }
 
@@ -61,6 +61,7 @@ namespace VirtualEcoSystem
                 switch (PlayerOptions(new string[] { 
                     "Check Temperature",
                     "Check Environment",
+                    "Go to the Market",
                     "Check Inventory",
                     // "Craft Items from Inventory",
                     "Skip Day",
@@ -74,13 +75,16 @@ namespace VirtualEcoSystem
                         ConductEnvironmentCheck();
                         break;
                     case 3:
+                        ConductMarketCheck();
+                        break;
+                    case 4:
                         CurrPlayer.PInventory.PrintInventory();
                         WaitForInput();
                         break;
-                    case 4:
+                    case 5:
                         this.WantsToSkip = true;
                         break;
-                    case 5:
+                    case 6:
                         this.IsPlaying = false;
                             break;
                     default:
@@ -166,8 +170,7 @@ namespace VirtualEcoSystem
                 WriteLine("Current Events: " + CurrEnv.CurrentEvent);
                 // implement moisture check based on weather
                 // TODO: 
-
-                CurrPlayer.RemovePlayerTurn();
+                //CurrPlayer.RemovePlayerTurn();
             //}
             //else
             //{
@@ -518,6 +521,22 @@ namespace VirtualEcoSystem
                 { "mRatio", mRatio },
                 };
 
+        }
+
+        private void ConductMarketCheck()
+        {
+            Clear();
+            DisplayTopUI();
+            WriteLine("~~~ Viewing Marketplace ~~~");
+
+            int count = 1;
+            foreach(string itemLine in DesertMarket.FetchInventoryList())
+            {
+                WriteLine(count++ + " " + itemLine);
+            }
+
+            WaitForInput("Press any key to return to main menu");
+            return;
         }
     }
 }

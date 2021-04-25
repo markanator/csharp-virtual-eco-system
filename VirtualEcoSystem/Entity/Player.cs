@@ -10,7 +10,6 @@ namespace VirtualEcoSystem
 {
     public class Player
     {
-        //public Dictionary<string, int> Inventory;
         public Inventory PInventory;
         public int MaxTurns;
         public int CurrentTurns;

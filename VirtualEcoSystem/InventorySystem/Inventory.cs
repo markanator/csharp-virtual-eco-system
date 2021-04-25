@@ -20,12 +20,14 @@ namespace VirtualEcoSystem.Items
         private Action<Item> UseItemAction;
         private List<Item> ItemList;
 
+        public Inventory()
+        {
+            this.ItemList = new List<Item>();
+        }
         public Inventory(Action<Item> _useItemAction)
         {
             this.UseItemAction = _useItemAction;
             this.ItemList = new List<Item>();
-
-            Console.WriteLine("Inventory");
         }
 
         public List<Item> GetItemList()
