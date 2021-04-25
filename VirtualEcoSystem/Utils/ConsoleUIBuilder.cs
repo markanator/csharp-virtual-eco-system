@@ -57,9 +57,15 @@ namespace VirtualEcoSystem
 
         public static string AskForPlayerName()
         {
+            Clear();
             WriteLine("Lead Scientist:".Pastel("#40c2ff") + " And here we are...");
             WriteLine("By the way, I didn't catch your "+"name".Pastel("#ff458f") + "? What was it?");
             string input = ReadLine().Trim();
+
+            if (input.Trim() == "")
+            {
+                AskForPlayerName();
+            }
 
             return input;
         }
