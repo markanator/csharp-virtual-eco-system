@@ -7,7 +7,7 @@ namespace VirtualEcoSystem.Organisms
     [Serializable]
     public class Plant : Organism
     {
-        public int PlantAge { get; private set;}
+        //public int PlantAge { get; private set;}
         public bool CanHarvest { get; set; }
         public enum ReproductiveCycle{ 
             SEED,          // 0
@@ -23,10 +23,11 @@ namespace VirtualEcoSystem.Organisms
         public int TotalSeedsReleased;
         public int Hydration;
 
+        public Plant() { }
         public Plant (string _name, string _desc): base(_name, _desc)
         {
-            PlantAge = 1;
-            base.Age = PlantAge;
+            Age = 8;
+            //base.Age = Age;
             CurrentLifeStage = ReproductiveCycle.NEEDS_POLLEN;
             //
             CanHarvest = (int)CurrentLifeStage > 2 ? true: false;
@@ -71,7 +72,7 @@ namespace VirtualEcoSystem.Organisms
 
         public void IncreasePlantAge()
         {
-            this.PlantAge++;
+            this.Age++;
             this.LifeCycleDayCount++;
         }
 

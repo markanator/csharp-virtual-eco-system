@@ -10,6 +10,7 @@ namespace VirtualEcoSystem.Organisms
         public string Description;
         public int Age;
 
+        public Organism() { }
         public Organism(string _name, string _desc)
         {
             Name = _name;

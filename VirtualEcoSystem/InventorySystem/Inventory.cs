@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VirtualEcoSystem.Interfaces;
+using VirtualEcoSystem.Organisms;
 
 namespace VirtualEcoSystem.Items
 {
@@ -15,14 +16,14 @@ namespace VirtualEcoSystem.Items
     public class Inventory : IItemContainer
     {
         // void delegate from player to use an item
-        private Action<Item> UseItemAction;
+        private Action<Item, List<Organism>> UseItemAction;
         private List<Item> ItemList;
 
         public Inventory()
         {
             this.ItemList = new List<Item>();
         }
-        public Inventory(Action<Item> _useItemAction)
+        public Inventory(Action<Item, List<Organism>> _useItemAction)
         {
             this.UseItemAction = _useItemAction;
             this.ItemList = new List<Item>();
@@ -74,9 +75,9 @@ namespace VirtualEcoSystem.Items
             // use delegate to update UI
         }
 
-        public void UseItem(Item _item)
+        public void UseItem(Item _item, List<Organism> orgList)
         {
-            UseItemAction(_item);
+            UseItemAction(_item, orgList);
         }
 
         public bool ContainsItem(Item _item)

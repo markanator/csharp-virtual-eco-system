@@ -207,7 +207,7 @@ namespace VirtualEcoSystem.Entity
                 // throw err if it doesnt match
                 if (tempItem == null) throw new Exception("No item found");
 
-                if (CurrPlayer.HasEnoughToSell(tempItem))
+                if (CurrPlayer.HasEnoughToUse(tempItem))
                 {
                     // can sell
                     WriteLine($"How many items do you wish to sell? Max: {tempItem.Amount}");

@@ -81,13 +81,14 @@ namespace VirtualEcoSystem
                 Clear();
                 DisplayTopUI();
                 switch (PlayerOptions(new string[] { 
-                    "Check Temperature", // 1
-                    "Check Environment", // 2
-                    "Go to the Market",  // 3
-                    "Check Inventory",   // 4
+                    "Check Temperature",            // 1
+                    "Check Environment",            // 2
+                    "Go to the Market",             // 3
+                    "Check Inventory",              // 4
+                     "Use Items from Inventory",    // 5
                     // "Craft Items from Inventory",
-                    "Skip Day",          // 5
-                    "Exit Game",         // 6
+                    "Skip Day",                     // 6
+                    "Exit Game",                    // 7
                     }))
                 {
                     case 1:
@@ -104,9 +105,13 @@ namespace VirtualEcoSystem
                         WaitForInput();
                         break;
                     case 5:
-                        this.WantsToSkip = true;
+                        //this.WantsToSkip = true;
+                        CurrPlayer.ConductItemUsage(OrgList);
                         break;
                     case 6:
+                        this.WantsToSkip = true;
+                        break;
+                    case 7:
                         this.IsPlaying = false;
                             break;
                     default:
@@ -223,17 +228,17 @@ namespace VirtualEcoSystem
 
         private void GenerateWildLife(bool _firstTime = false)
         {
-            int plantCount = new Random().Next(9, _firstTime ? 15 : 24);
-            int mothCount = new Random().Next(6, _firstTime ? 11 : 26);
+            int plantCount = new Random().Next(5, _firstTime ? 25 : 15);
+            int mothCount = new Random().Next(8, _firstTime ? 21 : 18);
 
             for (int i = 0; i < plantCount; i++)
             {
-                OrgList.Add(new Plant("Yucca Plant", "Relies on Yucca Moth for species growth. Harvest to gain XX item."));
+                OrgList.Add(new Plant("Yucca Plant", "Relies on Yucca Moth for species growth. Harvest to gain an item."));
             }
 
             for (int i = 0; i < mothCount; i++)
             {
-                OrgList.Add(new Insect("Yucca Moth", "Relies on Yucca Plant for species growth. Collect to gain YY item.", 6));
+                OrgList.Add(new Insect("Yucca Moth", "Relies on Yucca Plant for species growth. Collect to gain an item.", 6));
             }
 
             // sort list by Name 
@@ -409,7 +414,7 @@ namespace VirtualEcoSystem
                             p.IncreasePlantAge();
                         }
                         // a player can harvest this item
-                        if (p.PlantAge >= 1 && !p.CanHarvest)
+                        if (p.Age >= 8 && !p.CanHarvest)
                         {
                             if (!Utils.__PROD__) Console.WriteLine("harvestable++");
                             p.MarkAsHarvestable();

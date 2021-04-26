@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VirtualEcoSystem.Items;
+using VirtualEcoSystem.Organisms;
 
 namespace VirtualEcoSystem.Interfaces
 {
@@ -17,7 +18,7 @@ namespace VirtualEcoSystem.Interfaces
         int ItemCount(Item _item);
         void AddItem(Item _item);
         void RemoveItem(Item _item);
-        void UseItem(Item _item);
+        void UseItem(Item _item, List<Organism> orglist);
         void PrintInventory();
     }
 }

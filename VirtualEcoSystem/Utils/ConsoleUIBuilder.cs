@@ -34,7 +34,7 @@ namespace VirtualEcoSystem
 
         public static void DisplayPlayerTurns(Player _player)
         {
-            int TotalPlayerTurns = _player.MaxTurns + _player.OverageTurns;
+            int TotalPlayerTurns = _player.FetchTotalTurns();
             Write("Turns: [");
             for (int i = 0; i < TotalPlayerTurns; i++)
             {

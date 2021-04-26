@@ -7,5 +7,4 @@
   <item name="Plant Adult" price="12" stock="8" type="PlantAdult"></item>
   <item name="Weak Coffee" price="5" stock="25" type="WeakCoffee"></item>
   <item name="Strong Coffee" price="8" stock="9" type="StrongCoffee"></item>
-  <item name="Animal Trap" price="25" stock="5" type="Trap"></item>
 </items>
