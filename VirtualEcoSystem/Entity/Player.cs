@@ -16,16 +16,14 @@ namespace VirtualEcoSystem.Entity
         public Inventory PInventory;
         public int MaxTurns;
         public int CurrentTurns;
-        private int OverageTurns;
         public string PlayerName;
         private double Wallet;
 
         public Player()
         {
             this.PlayerName = ConsoleUIBuilder.AskForPlayerName();
-            this.MaxTurns = 10;
-            this.CurrentTurns = 10;
-            this.OverageTurns = 3;
+            this.MaxTurns = 7;
+            this.CurrentTurns = 4;
             this.Wallet = 34;
 
             this.PInventory = new Inventory(UseItem);
@@ -33,7 +31,7 @@ namespace VirtualEcoSystem.Entity
 
         public bool PlayerConstitutionCheck()
         {
-            if (CurrentTurns + OverageTurns > 0)
+            if (this.CurrentTurns > 0)
             {
                 return true;
             }
@@ -41,41 +39,25 @@ namespace VirtualEcoSystem.Entity
             return false;
         }
 
-        public bool RemovePlayerTurn()
+        public void ResetPlayerTurns()
         {
-            if (this.OverageTurns > 0)
-            {
-                OverageTurns -= 1;
-                return true;
-            }
-            else if (CurrentTurns - 1 >= 0)
-            {
-                CurrentTurns -= 1;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            this.CurrentTurns = MaxTurns;
+        }
+
+        public void RemovePlayerTurn(int amountToremove)
+        {
+            this.CurrentTurns -= amountToremove;
+
         }
 
         public void AddTurns(int amountToAdd)
         {
-            int currTurns = this.CurrentTurns + this.OverageTurns;
-            int overTurns = 0;
-
-            if (currTurns + amountToAdd >= 10)
-            {
-                overTurns = currTurns + amountToAdd - 10;
-            }
-
-            this.CurrentTurns = amountToAdd;
-            this.OverageTurns = overTurns;
+            this.CurrentTurns += amountToAdd;
         }
 
         public int FetchTotalTurns()
         {
-            return this.CurrentTurns + this.OverageTurns;
+            return this.CurrentTurns;
         }
 
         public void CraftItem(Item _item)
@@ -232,14 +214,30 @@ namespace VirtualEcoSystem.Entity
         public void ConductItemUsage(List<Organism> orgList)
         {
             Clear();
+            WriteLine("~~~ Use an Item ~~~".Pastel(Utils.Color["Primary"]));
+            if (this.PInventory.GetItemList().Count <= 0)
+            {
+                WriteLine("Sorry, nothing in inventory to use".Pastel(Utils.Color["Warning"]));
+                WaitForInput();
+                return;
+            }
+
             foreach (var item in PInventory.GetItemList())
             {
-                WriteLine($"[{item.Name}] - (x{item.Amount}) :: (-1 turn)");
+                if (item.CurrItemType == Item.ItemType.PlantLeaf)
+                {
+                    WriteLine($"Unable to use : {item.Name}");
+                }
+                else
+                {
+                    WriteLine($"[{item.Name}] - (x{item.Amount}) :: (-1 turn)");
+                }
             }
             WriteLine("\n");
-            WriteLine("What do you want to use? " +
+            WriteLine("What do you want to use?\n" +
                 "(Q)".Pastel(Utils.Color["Actions"]) +
-                " to return to Main Menu\nPlease enter name of item within square brackets, " +
+                " to return to Main Menu" +
+                "\nPlease enter name of item, " +
                 "Case Sensitive.".Pastel(Utils.Color["Other"]));
             // read player input
             string playerInput = ReadLine().Trim();
@@ -255,6 +253,7 @@ namespace VirtualEcoSystem.Entity
                     Item tempItem = this.PInventory.FetchItem(playerInput);
                     // throw err if it doesnt match
                     if (tempItem == null) throw new Exception("No item found");
+                    else if (tempItem.CurrItemType == Item.ItemType.PlantLeaf) throw new Exception("Cannot use Item");
 
                     if (this.HasEnoughToUse(tempItem))
                     {
@@ -264,7 +263,10 @@ namespace VirtualEcoSystem.Entity
                             CurrItemType = tempItem.CurrItemType,
                             MerchantPrice = tempItem.MerchantPrice
                             }, orgList);
-                        this.RemovePlayerTurn();
+                        this.RemovePlayerTurn(1);
+                        WriteLine($"Successfully used a(n) {tempItem.Name}!".Pastel(Utils.Color["Success"]));
+                        WaitForInput();
+                        ConductItemUsage(orgList);
                     }
                     else
                     {

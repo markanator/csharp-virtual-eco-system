@@ -87,7 +87,7 @@ namespace VirtualEcoSystem.Entity
             }
         }
 
-        public void PerformDailyWeatherChange(bool _initial =false)
+        public string PerformDailyWeatherChange(bool _initial =false)
         {
             // get a temp from arr
             int preTemp = AverageTempList[RandomGen.Next(0, AverageTempList.Count - 1)];
@@ -97,30 +97,39 @@ namespace VirtualEcoSystem.Entity
             this.CurrentTemp = currTempIndex + preTemp;
             // generate an event, ran only once
             this.CurrentEvent = _initial ? "Normal Day" : GenerateRandomEvent();
+
+            // for logger
+            return $"ENVIRO: {this.CurrentTemp}deg | {this.CurrentEvent}";
         }
 
-        public void PerformTemperatureEvent(List<Organism> _orglist)
+        public string PerformTemperatureEvent(List<Organism> _orglist)
         {
             switch (this.CurrentEvent)
             {
                 case "Fire":
                     Fire.CustomEvent(_orglist);
-                    break;
+                    return "Fire";
+                    //break;
                 case "Drought":
                     Drought.CustomEvent(_orglist);
-                    break;
+                    return "Drought";
+                    //break;
                 case "Flood":
                     Flood.CustomEvent(_orglist);
-                    break;
+                    return "Flood";
+                    //break;
                 case "Overcast":
                     Overcast.CustomEvent(_orglist);
-                    break;
+                    return "Overcast";
+                    //break;
                 case "Sunny":
                     Sunny.CustomEvent(_orglist);
-                    break;
+                    return "Sunny";
+                    //break;
                 default:
                     Console.WriteLine("Normal Day");
-                    break;
+                    return "Normal Day";
+                    //break;
             }
         }
 

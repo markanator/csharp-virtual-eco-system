@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Savestate code help from:: @Epitome https://youtu.be/Q2nEsa209ew
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

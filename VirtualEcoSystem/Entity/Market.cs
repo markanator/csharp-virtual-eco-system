@@ -103,6 +103,7 @@ namespace VirtualEcoSystem.Entity
         // main menu items
         public void SellItemsToPlayer(Player CurrPlayer)
         {
+            Clear();
             WriteLine("~~~ Buying from Marketplace ~~~".Pastel(Utils.Color["Primary"]));
             foreach (string itemLine in this.FetchInventoryList())
             {
@@ -110,9 +111,10 @@ namespace VirtualEcoSystem.Entity
             }
             WriteLine("\n");
             WriteLine($"{CurrPlayer.PlayerName} has: {CurrPlayer.GetCurrentCashAmount():C}".Pastel(Utils.Color["Primary"]));
-            WriteLine("What do you want to purchase? " +
+            WriteLine("What do you want to purchase?\n" +
                 "(Q)".Pastel(Utils.Color["Actions"]) +
-                " to return to Main Menu\nPlease enter name of item within square brackets, " +
+                " to return to Main Menu" +
+                "\nPlease enter name of item, " +
                 "Case Sensitive.".Pastel(Utils.Color["Other"]));
             string playerInput = ReadLine().Trim();
 
@@ -189,10 +191,10 @@ namespace VirtualEcoSystem.Entity
             WriteLine("\n");
             WriteLine($"Market has: {this.Cash:C}".Pastel(Utils.Color["Other"]));
             WriteLine($"{CurrPlayer.PlayerName} has: {CurrPlayer.GetCurrentCashAmount():C}".Pastel(Utils.Color["Primary"]));
-            WriteLine("What do you want to sell? " +
+            WriteLine("What do you want to sell?\n" +
                 "(Q)".Pastel(Utils.Color["Actions"]) +
                 " to return to Main Menu" +
-                "\nPlease enter name of item within square brackets, " +
+                "\nPlease enter name of item, " +
                 "Case Sensitive.".Pastel(Utils.Color["Other"]));
             // read what the player wants to sell
             string playerInput = ReadLine().Trim();

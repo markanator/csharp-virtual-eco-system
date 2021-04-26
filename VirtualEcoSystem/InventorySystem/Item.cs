@@ -1,4 +1,5 @@
-﻿using System;
+﻿// 
+using System;
 using System.Collections.Generic;
 using VirtualEcoSystem.Interfaces;
 
@@ -42,21 +43,5 @@ namespace VirtualEcoSystem.Items
             this.CurrItemType = _type;
             this.MerchantPrice = 4;
         }
-
-        //public bool IsStackable()
-        //{
-        //    switch (this.CurrItemType)
-        //    {
-        //        default:
-        //        case ItemType.Bait:
-        //        case ItemType.GrilledMeat:
-        //        case ItemType.MothEggs:
-        //        case ItemType.PlantLeaf:
-        //        case ItemType.Trap:
-        //            return true;
-        //        case ItemType.PlantHealingPotion:
-        //            return false;
-        //    }
-        //}
     }
 }

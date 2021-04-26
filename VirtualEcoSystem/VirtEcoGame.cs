@@ -1,8 +1,17 @@
 ﻿/*
- * VirtEco
+ * Virtual Ecosystem: Mojave Desery
  * By: Mark Ambrocio
  * 
+ * Credits:
  * Using Pastel from nuget packages.
+ * XML loading from Vending Machine Exercise
+ * Icon from: https://icon-icons.com/icon/desert
+ * SaveData/BinaryFormatter help from: @Epitome https://youtu.be/Q2nEsa209ew
+ * Inventory with help from: 
+ * @CodeMonkey on youtube.com
+ * & Kryzel on youtube: https://www.youtube.com/watch?v=gZsJ_rG5hdo
+ * Obligate Mutual guidance from: Prof. J. Baxter.
+ * 
  */
 using System;
 using System.Collections.Generic;
@@ -92,20 +101,29 @@ namespace VirtualEcoSystem
                     }))
                 {
                     case 1:
+                        Clear();
+                        DisplayTopUI();
                         CurrEnv.ConductWeatherCheck();
                         break;
                     case 2:
+                        Clear();
+                        DisplayTopUI();
                         ConductEnvironmentCheck();
                         break;
                     case 3:
+                        Clear();
+                        DisplayTopUI();
                         ConductMarketCheck();
                         break;
                     case 4:
+                        Clear();
+                        DisplayTopUI();
                         CurrPlayer.PInventory.PrintInventory();
                         WaitForInput();
                         break;
                     case 5:
-                        //this.WantsToSkip = true;
+                        Clear();
+                        DisplayTopUI();
                         CurrPlayer.ConductItemUsage(OrgList);
                         break;
                     case 6:
@@ -124,18 +142,28 @@ namespace VirtualEcoSystem
                 if (CurrPlayer.CurrentTurns <= 0 || WantsToSkip)
                 {
                     Clear();
+                    List<string> itemsToLog = new List<string>();
                     if (!Utils.__PROD__) Console.WriteLine("=== Fresh Orgs Entered ===");
                     GenerateWildLife();
                     if (!Utils.__PROD__) Console.WriteLine("=== START DAILIES ===");
 
                     // add to day count
                     DayCount++;
+                    itemsToLog.Add($"DAY Count:: {DayCount}");
 
                     // reset player health
                     CurrPlayer.CurrentTurns = CurrPlayer.MaxTurns;
+                    itemsToLog.Add($"Player Stats:: {CurrPlayer.PlayerName} | {CurrPlayer.GetCurrentCashAmount():C}");
+                    itemsToLog.Add("Player Inventory:: ");
+                    foreach (var item in CurrPlayer.ReturnPlayersStash().GetItemList())
+                    {
+                        itemsToLog.Add($"{item.Name} : (x{item.Amount}) : {item.MerchantPrice:C}");
+                    }
+                    itemsToLog.Add("~~~ END ~~~");
 
                     // perform daily environment actions
-                    CurrEnv.PerformDailyWeatherChange();
+                    string env = CurrEnv.PerformDailyWeatherChange();
+                    itemsToLog.Add(env);
 
                     if (!Utils.__PROD__) Console.WriteLine($"Weather: " +
                         $"{CurrEnv.CurrentTemp} | " +
@@ -143,15 +171,28 @@ namespace VirtualEcoSystem
 
                     // adjust plant stuff
                     CheckWeatherMoisture();
+                    itemsToLog.Add($"Weather: Air Moisture:: {AirMoisture}");
                     // perform daily organism actions
-                    PerformOrganismDailies();
+                    List<string> orgDailyFeedback = PerformOrganismDailies();
+
+                    foreach (string item in orgDailyFeedback)
+                    {
+                        itemsToLog.Add(item);
+                    }
+
 
                     // finally, check and run temperature event
-                    CurrEnv.PerformTemperatureEvent(OrgList);
-                    ConductPlantMothRatioCheck();
+                    string eventCalled = CurrEnv.PerformTemperatureEvent(OrgList);
+                    itemsToLog.Add("EVENT CALLED::: "+eventCalled);
 
-                    //
+                    string calcFeedback = ConductPlantMothRatioCheck();
+                    itemsToLog.Add(calcFeedback);
+                    
+                    itemsToLog.Add("~~~~~~ END DEV STATS ~~~~~~");
                     if (!Utils.__PROD__) WaitForInput("~~~~~~ END DEV STATS ~~~~~~\nPress any key to return...");
+                    
+                    // create log file
+                    Utils.CreateLogFile(itemsToLog,DayCount);
                     // save game
                     SaveGame();
 
@@ -283,7 +324,7 @@ namespace VirtualEcoSystem
 
         private void PerformEnvironmentActions()
         {
-            switch (PlayerOptions(new string[] { "Harvest x1 Yucca Plant. (-1 Turn)", "Collect x2 Moths.(-1 Turn)", "Return to office" }))
+            switch (PlayerOptions(new string[] { "Harvest x1 Yucca Plant. (-2 Turn)", "Collect x2 Moths.(-1 Turn)", "Return to office" }))
             {
                 case 1:
                     if (CurrPlayer.PlayerConstitutionCheck())
@@ -314,7 +355,7 @@ namespace VirtualEcoSystem
                                 Amount = 1,
                                 MerchantPrice = 1
                             });
-                            CurrPlayer.RemovePlayerTurn();
+                            CurrPlayer.RemovePlayerTurn(2);
                             OrgList.Remove(plantToHarvest);
                             WaitForInput();
                         }
@@ -363,7 +404,7 @@ namespace VirtualEcoSystem
                                 Amount = 2,
                                 MerchantPrice = 1
                             });
-                            CurrPlayer.RemovePlayerTurn();
+                            CurrPlayer.RemovePlayerTurn(1);
                             OrgList.Remove(mothToCatach);
                             WaitForInput();
                         }
@@ -392,8 +433,9 @@ namespace VirtualEcoSystem
             }
         }
 
-        private void PerformOrganismDailies()
+        private List<string> PerformOrganismDailies()
         {
+            List<string> logList = new List<string>();
             // List<int> Orgs to remove // a collection of indexes to remove
             List<Insect> HungryMoths = new List<Insect>();
             List<Plant> PlantsToPollinate = new List<Plant>();
@@ -431,21 +473,19 @@ namespace VirtualEcoSystem
                             if (!Utils.__PROD__) Console.WriteLine("PlantToRemove++");
                             PlantsToRemove.Add(OrgList.IndexOf(p));
                         }
-
-                        if (!Utils.__PROD__) Console.WriteLine($"age {p.Age}" +
+                        string msg= $"age {p.Age}" +
                             $"\nhydration: {p.Hydration}" +
                             $"\ncanHarvest:{p.CanHarvest}" +
                             $"\ndaysInCycle:{p.LifeCycleDayCount}" +
-                            $"\nlifeStage:{p.CurrentLifeStage}");
+                            $"\nlifeStage:{p.CurrentLifeStage}";
+
+                        if (!Utils.__PROD__) Console.WriteLine(msg);
+                        logList.Add(msg);
                         break;
+
                     case Insect bugg:
                         bugg.IncreaseAge();
                         bugg.ConductBirthday();
-                        if (!Utils.__PROD__) Console.WriteLine($"-------" +
-                            $"\nmoth idx:{OrgList.IndexOf(bugg)}" +
-                            $"\nage::{bugg.Age}" +
-                            $"\ndaysInCycle:{bugg.DaysInCycle}" +
-                            $"\nlifestage: {bugg.CurrentCycleStage}");
 
 
                         if (bugg.Age >= 12)
@@ -459,7 +499,15 @@ namespace VirtualEcoSystem
                         {
                             HungryMoths.Add(bugg);
                         }
-                            break;
+                        string bmsg = $"-------" +
+                            $"\nmoth idx:{OrgList.IndexOf(bugg)}" +
+                            $"\nage::{bugg.Age}" +
+                            $"\ndaysInCycle:{bugg.DaysInCycle}" +
+                            $"\nlifestage: {bugg.CurrentCycleStage}";
+
+                        if (!Utils.__PROD__) Console.WriteLine(bmsg);
+                        logList.Add(bmsg);
+                        break;
                 }
             }
 
@@ -473,6 +521,7 @@ namespace VirtualEcoSystem
                 });
 
 
+                logList.Add($"{count} moths have died.");
                 if (!Utils.__PROD__) WriteLine($"{count} moths have died.");
             }
 
@@ -491,6 +540,8 @@ namespace VirtualEcoSystem
             {
                 PerformMothPlantPollination(HungryMoths, PlantsToPollinate, HungryMoths.Count);
             }
+
+            return logList;
         }
 
         private void PerformMothPlantPollination(List<Insect> _moths, List<Plant> _plants, int _amount)
@@ -508,8 +559,9 @@ namespace VirtualEcoSystem
             }
         }
 
-        private void ConductPlantMothRatioCheck()
+        private string ConductPlantMothRatioCheck()
         {
+            //string feedback = "No new messages.";
             Dictionary<string, int> ObligateRatios = PerformObligateRatioCalc();
             int acceptRange = 8;
             int dangerAmount = 85;
@@ -527,13 +579,14 @@ namespace VirtualEcoSystem
             bool plantsWarningRange = ObligateRatios["pRatio"] >= warnAmount && ObligateRatios["pRatio"] > ObligateRatios["mRatio"];
             bool plantsAttentionRange = ObligateRatios["pRatio"] >= attenAmount && ObligateRatios["pRatio"] > ObligateRatios["mRatio"];
 
-            string msg;
+            string msg ="";
             // if there are too many moths, compared to plants
             if (mothsAcceptableRange && plantsAcceptableRange)
             {
                 msg = "\nMoth to Plant ratio ok".Pastel("#12c754");
                 WriteLine(msg);
                 PlantMothRatioMsg = "No new messages.";
+
             }
             else if (mothsDangerRange || plantsDangerRange)
             {
@@ -554,6 +607,8 @@ namespace VirtualEcoSystem
                 WriteLine("\n" + msg);
                 PlantMothRatioMsg = msg;
             }
+
+            return msg;
         }
 
         private Dictionary<string, int> PerformObligateRatioCalc()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿// XML loader from Vending Machine Exercise
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
@@ -105,6 +106,20 @@ namespace VirtualEcoSystem
             {
                 return merchantBuyPrice;
             }
+        }
+
+        public static void CreateLogFile(List<string> dailyLog,int dayCount)
+        {
+            //var fs = File.Open("dailyLog.txt",FileMode.OpenOrCreate,FileAccess.ReadWrite);
+            string logPath = $"logs/dailyLog_day_{dayCount}.txt";
+
+            if (!File.Exists(logPath))
+            {
+                var fs = File.Create(logPath);
+                fs.Close();
+            }
+
+            File.WriteAllLines(logPath, dailyLog);
         }
     }
 

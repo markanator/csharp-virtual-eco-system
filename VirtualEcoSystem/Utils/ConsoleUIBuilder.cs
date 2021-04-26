@@ -38,18 +38,18 @@ namespace VirtualEcoSystem
             Write("Turns: [");
             for (int i = 0; i < TotalPlayerTurns; i++)
             {
-                if (i >= _player.MaxTurns)
+                if (i >= 10)
                 {
-                    Write("#".Pastel("#7732a8"));
-                }
-                else if (i < _player.CurrentTurns)
-                {
-                    Write("#".Pastel("#fc352b"));
+                    Write("#".Pastel("#7732a8")); // purple
                 }
                 else
                 {
-                    Write("#".Pastel("#420907"));
+                    Write("#".Pastel("#fc352b")); // bright red
                 }
+                //else if (i < maxBright && i > TotalPlayerTurns)
+                //{
+                //    Write("#".Pastel("#420907")); // dark red
+                //}
 
             }
             Write("]");

@@ -11,10 +11,7 @@ namespace VirtualEcoSystem
     {
         protected Boolean IsPlaying;
 
-        public virtual void Setup()
-        {
-            // implement later
-        }
+        public virtual void Setup() { }
 
         public virtual void StartGame()
         {
