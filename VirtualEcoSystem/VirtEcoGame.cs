@@ -175,11 +175,13 @@ namespace VirtualEcoSystem
             SaveData.OrgList = OrgList;
             SaveData.PlantMothRatioMsg = PlantMothRatioMsg;
 
-            FileStream saveFile = File.Open(Utils.SaveGameFile, FileMode.OpenOrCreate, FileAccess.Write);
+            // TODO change BinaryFormatter to xmlSerializer
+            FileStream saveFile = File.Open(Utils.SaveGameFileTxt, FileMode.OpenOrCreate, FileAccess.Write);
             var bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
             
             // save content
             bf.Serialize(saveFile, SaveData);
+
             // close stream
             saveFile.Close();
 
@@ -188,10 +190,11 @@ namespace VirtualEcoSystem
 
         private void LoadContent()
         {
+            // TODO change BinaryFormatter to xmlSerializer
             try
             {
                 // attempt to read from file
-                FileStream loadFile = File.Open(Utils.SaveGameFile, FileMode.Open, FileAccess.Read);
+                FileStream loadFile = File.Open(Utils.SaveGameFileTxt, FileMode.Open, FileAccess.Read);
                 var bf = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                 // load savestate from file
                 SaveData = (SaveState)bf.Deserialize(loadFile);
@@ -601,15 +604,22 @@ namespace VirtualEcoSystem
             Clear();
             DisplayTopUI();
             WriteLine("~~~ Viewing Marketplace ~~~");
-
-            int count = 1;
-            foreach(string itemLine in DesertMarket.FetchInventoryList())
+            switch (PlayerOptions(new string[] { "Buy items from market", "Sell items to Market", "Return to office" }))
             {
-                WriteLine(count++ + " " + itemLine);
-            }
-
-            WaitForInput("Press any key to return to main menu");
-            return;
+                case 1:
+                    // player wants to buy items
+                    Clear();
+                    DisplayTopUI();
+                    DesertMarket.SellItemsToPlayer(CurrPlayer);
+                    break;
+                case 2:
+                case 3:
+                default:
+                    ConductMarketCheck();
+                    break;
+            }            
         }
+
+        //private
     }
 }

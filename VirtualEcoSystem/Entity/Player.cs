@@ -16,16 +16,17 @@ namespace VirtualEcoSystem.Entity
         public int CurrentTurns;
         public int OverageTurns;
         public string PlayerName;
+        private int Wallet;
 
         public Player()
         {
             this.PlayerName = ConsoleUIBuilder.AskForPlayerName();
-            //Inventory = new Dictionary<string, int>();
-            MaxTurns = 10;
-            CurrentTurns = 10;
-            OverageTurns = 3;
+            this.MaxTurns = 10;
+            this.CurrentTurns = 10;
+            this.OverageTurns = 3;
+            this.Wallet = 34;
 
-            PInventory = new Inventory(UseItem);
+            this.PInventory = new Inventory(UseItem);
         }
 
         public bool PlayerConstitutionCheck()
@@ -101,5 +102,27 @@ namespace VirtualEcoSystem.Entity
             }
         }
 
+        // removes amount based on item's price
+        public void PayWithCash(int itemPrice)
+        {
+            this.Wallet -= itemPrice;
+        }
+
+        // returns a players current wallet amount
+        public int GetCurrentCashAmount()
+        {
+            return this.Wallet;
+        }
+
+        public List<string> FetchInventoryList()
+        {
+            List<string> tempItemsList = new List<string>();
+            foreach (Item item in PInventory.FetchInventoryList())
+            {
+                tempItemsList.Add($"[{item.Name}] : (x{item.Amount}) : ${item.MerchantPrice}");
+            }
+
+            return tempItemsList;
+        }
     }
 }

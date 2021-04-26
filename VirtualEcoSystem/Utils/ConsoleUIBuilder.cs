@@ -15,7 +15,7 @@ namespace VirtualEcoSystem
     {
         public static void IntroScreen(string _playerName)
         {
-            WriteLine($"Welcome {_playerName}, to the {"Mojave Desert".Pastel("#ffc35c")}. Its hot here.");
+            WriteLine($"Welcome {_playerName}, to the {"Mojave Desert".Pastel(Utils.Color["Noun"])}. Its hot here.");
             WriteLine("You will be in charge of this section of the Desert."
                 + $"\nYou've been tasked to ensure the envorinment stays {"balanced".Pastel("#ff458f")} and {"productive".Pastel("#ff458f")}." 
                 + $"\nYou will face different obstacles daily with a limited amount of {"energy".Pastel("#40c2ff")} and {"resources".Pastel("#40c2ff")}." 
@@ -59,11 +59,11 @@ namespace VirtualEcoSystem
         public static string AskForPlayerName()
         {
             Clear();
-            WriteLine("Lead Scientist:".Pastel("#40c2ff") + " And here we are...");
-            WriteLine("By the way, I didn't catch your "+"name".Pastel("#ff458f") + "? What was it?");
+            WriteLine("Lead Scientist:".Pastel(Utils.Color["Noun"]) + " And here we are...");
+            WriteLine("By the way, I didn't catch your "+"name".Pastel(Utils.Color["Noun"]) + "? What was it?");
             string input = ReadLine().Trim();
 
-            if (input.Trim() == "")
+            if (input.Trim().Length <= 1)
             {
                 AskForPlayerName();
             }
@@ -87,9 +87,10 @@ namespace VirtualEcoSystem
             {
                 convertedInput = Convert.ToInt32(playerInput);
             }
-            catch(FormatException)
+            catch
             {
                 // TODO
+                PlayerOptions(playerOptions);
             }
 
             if (convertedInput > 0 && convertedInput <= playerOptions.Length)

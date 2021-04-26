@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<items>
+  <item name="Water Bottle" price="2" stock="15" type="WaterBottle"></item>
+  <item name="Moth Eggs" price="4" stock="20" type="MothEggs"></item>
+  <item name="Plant Seed" price="4" stock="20" type="PlantSeed"></item>
+  <item name="Plant Sprout" price="7" stock="10" type="PlantSprout"></item>
+  <item name="Plant Adult" price="12" stock="8" type="PlantAdult"></item>
+  <item name="Weak Coffee" price="5" stock="25" type="WeakCoffee"></item>
+  <item name="Strong Coffee" price="8" stock="9" type="StrongCoffee"></item>
+  <item name="Animal Trap" price="25" stock="5" type="Trap"></item>
+</items>

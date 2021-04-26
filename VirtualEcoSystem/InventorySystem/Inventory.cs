@@ -14,9 +14,6 @@ namespace VirtualEcoSystem.Items
     [Serializable]
     public class Inventory : IItemContainer
     {
-        // delegate to updateUI
-        //public event EventHandler OnItemListChanged;
-
         // void delegate from player to use an item
         private Action<Item> UseItemAction;
         private List<Item> ItemList;
@@ -126,6 +123,11 @@ namespace VirtualEcoSystem.Items
             }
 
             Console.WriteLine("~~~ END REPORT ~~~".Pastel("#792ca3"));
+        }
+
+        public List<Item> FetchInventoryList()
+        {
+            return ItemList;
         }
     }
 

@@ -1,8 +1,0 @@
-﻿Water Bottle,15,WaterBottle,2
-Moth Eggs,20,MothEggs,5
-Plant Seed,20,PlantSeed,6
-Plant Sprout,20,PlantSprout,10
-Plant Adult,10,PlantAdult,12
-Weak Coffee,50,WeakCoffee,1
-Strong Coffee,25,StrongCoffee,5
-Animal Trap,10,Trap,25

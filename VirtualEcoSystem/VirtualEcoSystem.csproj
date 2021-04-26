@@ -55,7 +55,6 @@
     <Compile Include="Utils\ConsoleUIBuilder.cs" />
     <Compile Include="Entity\Game.cs" />
     <Compile Include="Interfaces\IItemContainer.cs" />
-    <Compile Include="InventorySystem\CraftingRecipe.cs" />
     <Compile Include="InventorySystem\Inventory.cs" />
     <Compile Include="Organisms\Bird.cs" />
     <Compile Include="Events\Drought.cs" />
@@ -84,7 +83,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\Merchant.txt" />
+    <Content Include="Data\MerchantStock.xml" />
     <Content Include="desert.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
