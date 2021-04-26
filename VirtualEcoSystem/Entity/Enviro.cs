@@ -5,6 +5,7 @@ using System.Text;
 using static VirtualEcoSystem.Utils;
 using VirtualEcoSystem.Organisms;
 using VirtualEcoSystem.Events;
+using static System.Console;
 
 namespace VirtualEcoSystem.Entity
 {
@@ -121,6 +122,26 @@ namespace VirtualEcoSystem.Entity
                     Console.WriteLine("Normal Day");
                     break;
             }
+        }
+
+        // MAIN MENU ACTIONS
+        public void ConductWeatherCheck()
+        {
+            //if (CurrPlayer.PlayerConstitutionCheck())
+            //{
+            WriteLine("~~~ CHECKING WEATHER ~~~");
+            WriteLine(this.FetchCurrentTempFromEnvironment());
+            WriteLine("Current Events: " + this.CurrentEvent);
+            // implement moisture check based on weather
+            // TODO: 
+            //CurrPlayer.RemovePlayerTurn();
+            //}
+            //else
+            //{
+            //    WriteLine("Unable to Perform Request.");
+            //}
+
+            ConsoleUIBuilder.WaitForInput();
         }
 
     }

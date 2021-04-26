@@ -9,6 +9,7 @@ using System.IO;
 using Pastel;
 using static System.Console;
 using static VirtualEcoSystem.ConsoleUIBuilder;
+using static VirtualEcoSystem.Utils;
 
 
 namespace VirtualEcoSystem.Entity
@@ -17,7 +18,7 @@ namespace VirtualEcoSystem.Entity
     class Market
     {
         private List<Item> MerchantStock;
-        private int Cash;
+        private double Cash;
         public Market()
         {
             MerchantStock = Utils.LoadMerchantXmlItems();
@@ -26,35 +27,22 @@ namespace VirtualEcoSystem.Entity
 
         public void AddItem(Item _item)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool ContainsItem(Item _item)
-        {
+            bool itemAlreadyInInventory = false;
             // check if its in the inventory
-            foreach (var inventoryItem in MerchantStock)
-            {
-                // already in the inventory
-                if (inventoryItem.CurrItemType == _item.CurrItemType)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public int ItemCount(Item _item)
-        {
-            int itemCount = 0;
             foreach (Item inventoryItem in MerchantStock)
             {
                 // already in the inventory
                 if (inventoryItem.CurrItemType == _item.CurrItemType)
                 {
-                    itemCount++;
+                    itemAlreadyInInventory = true;
+                    inventoryItem.Amount += _item.Amount;
                 }
             }
-            return itemCount;
+            if (!itemAlreadyInInventory)
+            {
+                MerchantStock.Add(_item);
+            }
+            // use delegate to update UI
         }
 
         public Item FetchItem(string itemName)
@@ -85,7 +73,7 @@ namespace VirtualEcoSystem.Entity
             Cash += soldItemPrice;
         }
 
-        public int ShowVenderCashLimit()
+        public double ShowVenderCashLimit()
         {
             return Cash;
         }
@@ -112,13 +100,10 @@ namespace VirtualEcoSystem.Entity
             // use delegate to update UI
         }
 
-        public void UseItem(Item _item)
-        {
-            // not being used by the market
-        }
-
+        // main menu items
         public void SellItemsToPlayer(Player CurrPlayer)
         {
+            WriteLine("~~~ Buying from Marketplace ~~~".Pastel(Utils.Color["Primary"]));
             foreach (string itemLine in this.FetchInventoryList())
             {
                 WriteLine(itemLine);
@@ -131,11 +116,8 @@ namespace VirtualEcoSystem.Entity
                 "Case Sensitive.".Pastel(Utils.Color["Other"]));
             string playerInput = ReadLine().Trim();
 
-            if (playerInput.ToLower() == "q")
-            {
-                // main menu
-                return;
-            }
+            // go to Main Menu
+            if (playerInput.ToLower() == "q") return;
 
             try
             {
@@ -197,7 +179,107 @@ namespace VirtualEcoSystem.Entity
 
         public void BuyItemsFromPlayer(Player CurrPlayer)
         {
+            Clear();
+            WriteLine("~~~ Sell to Marketplace ~~~".Pastel(Utils.Color["Primary"]));
+            // display what the user has in their pockets
+            foreach (var itemLine in CurrPlayer.FetchInventoryList())
+            {
+                WriteLine(itemLine);
+            }
+            WriteLine("\n");
+            WriteLine($"Market has: {this.Cash:C}".Pastel(Utils.Color["Other"]));
+            WriteLine($"{CurrPlayer.PlayerName} has: {CurrPlayer.GetCurrentCashAmount():C}".Pastel(Utils.Color["Primary"]));
+            WriteLine("What do you want to sell? " +
+                "(Q)".Pastel(Utils.Color["Actions"]) +
+                " to return to Main Menu" +
+                "\nPlease enter name of item within square brackets, " +
+                "Case Sensitive.".Pastel(Utils.Color["Other"]));
+            // read what the player wants to sell
+            string playerInput = ReadLine().Trim();
+            // go to Main Menu
+            if (playerInput.ToLower() == "q") return;
 
+            // MAIN BLOCK
+            try
+            {
+                // attempt to fetch item 
+                Item tempItem = CurrPlayer.ReturnPlayersStash().FetchItem(playerInput);
+                // throw err if it doesnt match
+                if (tempItem == null) throw new Exception("No item found");
+
+                if (CurrPlayer.HasEnoughToSell(tempItem))
+                {
+                    // can sell
+                    WriteLine($"How many items do you wish to sell? Max: {tempItem.Amount}");
+                    int amountToSell = 1;
+                    try
+                    {
+                        amountToSell = Convert.ToInt32(ReadLine().Trim());
+                        if (amountToSell <= 0 || amountToSell > tempItem.Amount)
+                        {
+                            throw new Exception("Attempting to sell negative or more than owned.");
+                        }
+                    }
+                    catch 
+                    {
+                        // amount entered does not conform
+                        WriteLine("That's a hard pass. Attempting to sell negative or more than currently owned.".Pastel(Utils.Color["Danger"]));
+                        WaitForInput();
+                        BuyItemsFromPlayer(CurrPlayer);
+                    }
+                    
+
+                    // can sell
+                    // check to see if merchant has enough money
+                    if (this.Cash - tempItem.MerchantPrice >= 0)
+                    {
+                        // calculate how much the merchant is willing to pay
+                        double merchantAmountForXItem = CalcMerchantPurchasePrice(tempItem.MerchantPrice) * amountToSell;
+                        // take from merchant wallet && add to player
+                        this.Cash -= merchantAmountForXItem;
+                        CurrPlayer.CashForSelling(merchantAmountForXItem);
+                        // remove one from merchant && add 1 to player inventory
+                        this.AddItem(new Item
+                        {
+                            Name = tempItem.Name,
+                            Amount = amountToSell,
+                            CurrItemType = tempItem.CurrItemType,
+                            MerchantPrice = tempItem.MerchantPrice
+                        });
+                        CurrPlayer.PInventory.RemoveItem(new Item
+                        {
+                            Name = tempItem.Name,
+                            Amount = amountToSell,
+                            CurrItemType = tempItem.CurrItemType,
+                            MerchantPrice = tempItem.MerchantPrice
+                        });
+
+                        WriteLine("Successfully purchased item!".Pastel(Utils.Color["Success"]));
+                        WaitForInput();
+                        BuyItemsFromPlayer(CurrPlayer);
+                    }
+                    else
+                    {
+                        WriteLine("You do not have enough money for that.".Pastel(Utils.Color["Warning"]));
+                        WaitForInput();
+                        BuyItemsFromPlayer(CurrPlayer);
+                    }
+                }
+                else
+                {
+                    // cannot sell
+                    WriteLine("You do not any more of that item. Try something else.".Pastel(Utils.Color["Warning"]));
+                    WaitForInput();
+                    BuyItemsFromPlayer(CurrPlayer);
+                }
+            }
+            catch
+            {
+                // item not found
+                WriteLine("That item was not found, try again...".Pastel(Utils.Color["Danger"]));
+                WaitForInput();
+                BuyItemsFromPlayer(CurrPlayer);
+            }
         }
 
     }

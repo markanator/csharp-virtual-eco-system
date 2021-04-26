@@ -12,6 +12,7 @@ namespace VirtualEcoSystem.Interfaces
     {
         // allow us to communicate with anything that can contain items
         // merchant, lootbox, craft system
+        List<Item> GetItemList();
         bool ContainsItem(Item _item);
         int ItemCount(Item _item);
         void AddItem(Item _item);

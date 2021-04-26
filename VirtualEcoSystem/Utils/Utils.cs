@@ -2,16 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using VirtualEcoSystem.Organisms;
 using System.Xml;
+using Pastel;
+using VirtualEcoSystem.Organisms;
 using VirtualEcoSystem.Items;
 
 namespace VirtualEcoSystem
 {
     public static class Utils
     {
+        // enable this to remove daily outputs
+        public static bool __PROD__ = false;
+        // save file locations
         public const string SaveGameFileTxt = "VirtEcoSave.txt";
         public const string MerchantXmlFile = "../../Data/MerchantStock.xml";
+        // styling stuff
         public static Dictionary<string, string> Color = new Dictionary<string, string>()
         {
             { "Primary", "#0d6efd" }, // blue
@@ -25,8 +30,6 @@ namespace VirtualEcoSystem
         };
 
         public static Random RandomGen = new Random();
-
-        public static bool __PROD__ = false;
 
         public static void RemoveOrgsFromMain(List<Organism> mainList, List<Organism> removeList)
         {
@@ -50,16 +53,16 @@ namespace VirtualEcoSystem
 
         public static bool SaveFileExsists()
         {
-            Console.WriteLine("Checking for savegame data...");
+            if (!Utils.__PROD__) Console.WriteLine("Checking for savegame data...");
 
             if (File.Exists(Utils.SaveGameFileTxt))
             {
-                Console.WriteLine("Save Game Found");
+                if (!Utils.__PROD__) Console.WriteLine("Save Game Found".Pastel(Utils.Color["Success"]));
                 return true;
             }
             else
             {
-                Console.WriteLine("Missing Save File");
+                if (!Utils.__PROD__) Console.WriteLine("Missing Save File".Pastel(Utils.Color["Warning"]));
                 //CreateNewSaveFile();
                 return false;
             }
@@ -88,6 +91,20 @@ namespace VirtualEcoSystem
 
             return tempStock;
 
+        }
+
+        public static double CalcMerchantPurchasePrice(double ogItemPrice)
+        {
+            double merchantBuyPrice = ogItemPrice * .5;
+
+            if (merchantBuyPrice <= 0)
+            {
+                return 1.0;
+            } 
+            else
+            {
+                return merchantBuyPrice;
+            }
         }
     }
 

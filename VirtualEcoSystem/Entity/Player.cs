@@ -16,7 +16,7 @@ namespace VirtualEcoSystem.Entity
         public int CurrentTurns;
         public int OverageTurns;
         public string PlayerName;
-        private int Wallet;
+        private double Wallet;
 
         public Player()
         {
@@ -103,15 +103,25 @@ namespace VirtualEcoSystem.Entity
         }
 
         // removes amount based on item's price
-        public void PayWithCash(int itemPrice)
+        public void PayWithCash(double itemPrice)
         {
             this.Wallet -= itemPrice;
         }
 
+        public void CashForSelling(double itemPrice)
+        {
+            this.Wallet += itemPrice;
+        }
+
         // returns a players current wallet amount
-        public int GetCurrentCashAmount()
+        public double GetCurrentCashAmount()
         {
             return this.Wallet;
+        }
+
+        public Inventory ReturnPlayersStash()
+        {
+            return PInventory;
         }
 
         public List<string> FetchInventoryList()
@@ -119,10 +129,29 @@ namespace VirtualEcoSystem.Entity
             List<string> tempItemsList = new List<string>();
             foreach (Item item in PInventory.FetchInventoryList())
             {
-                tempItemsList.Add($"[{item.Name}] : (x{item.Amount}) : ${item.MerchantPrice}");
+                double calcPurchasePrice = Utils.CalcMerchantPurchasePrice(item.MerchantPrice);
+                tempItemsList.Add($"[{item.Name}] : (x{item.Amount}) : ${calcPurchasePrice}");
             }
 
             return tempItemsList;
+        }
+
+        public bool HasEnoughToSell(Item itemToSell)
+        {
+            try
+            {
+                Item pitem = PInventory.GetItemList().Find(item => item.CurrItemType == itemToSell.CurrItemType);
+                if (pitem != null && pitem.Amount - 1 >= 0)
+                {
+                        return true;
+                }
+                return false;
+            }
+            catch
+            {
+            // does not contain item or not enough to sell
+                return false;
+            }
         }
     }
 }

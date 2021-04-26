@@ -129,6 +129,13 @@ namespace VirtualEcoSystem.Items
         {
             return ItemList;
         }
+
+        public Item FetchItem(string itemName)
+        {
+            return ItemList
+                    .Where<Item>(item => item.Name == itemName)
+                    .First();
+        }
     }
 
 }

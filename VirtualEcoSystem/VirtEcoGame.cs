@@ -2,6 +2,7 @@
  * VirtEco
  * By: Mark Ambrocio
  * 
+ * Using Pastel from nuget packages.
  */
 using System;
 using System.Collections.Generic;
@@ -80,17 +81,17 @@ namespace VirtualEcoSystem
                 Clear();
                 DisplayTopUI();
                 switch (PlayerOptions(new string[] { 
-                    "Check Temperature",
-                    "Check Environment",
-                    "Go to the Market",
-                    "Check Inventory",
+                    "Check Temperature", // 1
+                    "Check Environment", // 2
+                    "Go to the Market",  // 3
+                    "Check Inventory",   // 4
                     // "Craft Items from Inventory",
-                    "Skip Day",
-                    "Exit Game"
+                    "Skip Day",          // 5
+                    "Exit Game",         // 6
                     }))
                 {
                     case 1:
-                        ConductWeatherCheck();
+                        CurrEnv.ConductWeatherCheck();
                         break;
                     case 2:
                         ConductEnvironmentCheck();
@@ -184,8 +185,6 @@ namespace VirtualEcoSystem
 
             // close stream
             saveFile.Close();
-
-            //WaitForInput("Game saved successfully.\nPress Any key to continue...");
         }
 
         private void LoadContent()
@@ -200,7 +199,11 @@ namespace VirtualEcoSystem
                 SaveData = (SaveState)bf.Deserialize(loadFile);
                 loadFile.Close();
 
-                WaitForInput("Successfully Loaded File.\nPress Any key to continue...");
+                if (!Utils.__PROD__) 
+                {
+                    WriteLine("Successfully Loaded File.".Pastel(Utils.Color["Success"]));
+                    WaitForInput("\nPress any key to continue...");
+                }
             } 
             catch
             {
@@ -235,25 +238,6 @@ namespace VirtualEcoSystem
 
             // sort list by Name 
             OrgList.OrderBy(org => org.Name);
-        }
-
-        private void ConductWeatherCheck()
-        {
-            //if (CurrPlayer.PlayerConstitutionCheck())
-            //{
-                WriteLine("~~~ CHECKING WEATHER ~~~");
-                WriteLine(CurrEnv.FetchCurrentTempFromEnvironment());
-                WriteLine("Current Events: " + CurrEnv.CurrentEvent);
-                // implement moisture check based on weather
-                // TODO: 
-                //CurrPlayer.RemovePlayerTurn();
-            //}
-            //else
-            //{
-            //    WriteLine("Unable to Perform Request.");
-            //}
-
-            WaitForInput();
         }
 
         private void CheckWeatherMoisture()
@@ -322,7 +306,8 @@ namespace VirtualEcoSystem
                             CurrPlayer.PInventory.AddItem(new Item { 
                                 Name = "Plant Leaf",
                                 CurrItemType = Item.ItemType.PlantLeaf,
-                                Amount = 1
+                                Amount = 1,
+                                MerchantPrice = 1
                             });
                             CurrPlayer.RemovePlayerTurn();
                             OrgList.Remove(plantToHarvest);
@@ -370,7 +355,8 @@ namespace VirtualEcoSystem
                             {
                                 Name = "Moth Eggs",
                                 CurrItemType = Item.ItemType.MothEggs,
-                                Amount = 2
+                                Amount = 2,
+                                MerchantPrice = 1
                             });
                             CurrPlayer.RemovePlayerTurn();
                             OrgList.Remove(mothToCatach);
@@ -613,13 +599,17 @@ namespace VirtualEcoSystem
                     DesertMarket.SellItemsToPlayer(CurrPlayer);
                     break;
                 case 2:
+                    Clear();
+                    DisplayTopUI();
+                    DesertMarket.BuyItemsFromPlayer(CurrPlayer);
+                    break;
                 case 3:
+                    return;
                 default:
                     ConductMarketCheck();
                     break;
             }            
         }
 
-        //private
     }
 }
